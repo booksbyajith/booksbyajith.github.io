@@ -183,15 +183,15 @@ Yes — everything in this step must be in **`booksbyajith/home`**, because that
 | Secret | Value |
 |---|---|
 | `FIREBASE_SERVICE_ACCOUNT` | open the JSON file from step 7 in Notepad/TextEdit, copy **everything**, paste |
-| `SMTP_HOST` | `smtp.mail.yahoo.com` |
+| `SMTP_HOST` | `smtp.gmail.com` |
 | `SMTP_PORT` | `465` |
-| `SMTP_USER` | the books Yahoo email address |
-| `SMTP_PASS` | a Yahoo **app password** (not the normal password) — see below |
-| `MAIL_FROM` | `Dr. Ajith Amarasinghe Books <the books Yahoo email address>` — Yahoo only sends from its own address |
-| `TEAM_EMAILS` | addresses that receive new-order emails, separated by commas (can include the Yahoo address) |
+| `SMTP_USER` | the books Gmail address |
+| `SMTP_PASS` | a Gmail **app password** (not the normal password) — see below |
+| `MAIL_FROM` | `Books by Ajith <the books Gmail address>` — Gmail only sends from its own address |
+| `TEAM_EMAILS` | addresses that receive new-order emails, separated by commas (can include the books Gmail address) |
 | `ADMIN_EMAILS` | the Google account(s) that will use the admin panel, separated by commas |
 
-**Yahoo app password:** sign in to Yahoo Mail → profile picture → **Account info** → **Account security** → turn on **2-step verification** if it is off → **Generate app password** (or "Manage app passwords") → name it `booksbyajith website` → copy the 16-letter password into `SMTP_PASS`.
+**Gmail app password:** sign in to the books Gmail account in a browser → turn on **2-Step Verification** at myaccount.google.com/signinoptions/twosv → open myaccount.google.com/apppasswords → name it `booksbyajith website` → **Create** → copy the 16-letter password (without spaces) into `SMTP_PASS`.
 
 These are GitHub *secrets*: nobody can read them back, and they never appear in logs or in the code.
 
@@ -364,7 +364,7 @@ Do this once with real money and your own phone:
 | Every order/track/form action fails with `unauthenticated` | The reCAPTCHA site key (variable) and secret key (App Check) must be from the same key, and `booksbyajith.github.io` must be on that key. Run **Deploy site** after changing the variable. |
 | Browser shows CORS errors | `ALLOWED_ORIGINS` must be exactly `https://booksbyajith.github.io`. Run **Deploy Firebase** (functions) after changing it. |
 | Bank slip won't open in admin | Do step 8 and check `STORAGE_BUCKET`. |
-| Emails don't arrive | Admin dashboard shows "Failed notifications". Check the Yahoo app password and that `MAIL_FROM` uses the Yahoo address. Re-run **sync-secrets**, then **Deploy Firebase** (functions). Check spam folders. |
+| Emails don't arrive | Admin dashboard shows "Failed notifications". Check the Gmail app password and that `MAIL_FROM` uses the same Gmail address as `SMTP_USER`. Re-run **sync-secrets**, then **Deploy Firebase** (functions). Check spam folders. |
 | Deploy fails: "billing account … required" / "Blaze" | Step 2 is not finished. |
 | Deploy fails: "secret … not found" | Run **Admin tools → sync-secrets** first. |
 | Admin shows "query requires an index" | Run **Deploy Firebase** with indexes ticked and wait a few minutes. |
