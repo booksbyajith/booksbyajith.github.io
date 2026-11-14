@@ -9,6 +9,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useT(lang);
+import SocialIcon from '../components/SocialIcon.astro';
 ---
 
 <BaseLayout lang={lang} title={t('contact.title')} description={t('contact.intro')}>
@@ -23,8 +24,29 @@ const t = useT(lang);
           </a>
         </li>
         <li data-config-wrap hidden>
-          <a href="#" data-config="facebook" hidden class="btn-secondary" target="_blank" rel="noopener">
+          <a
+            href="#"
+            data-config="facebook"
+            hidden
+            class="btn-secondary inline-flex items-center gap-2"
+            target="_blank"
+            rel="noopener"
+          >
+            <SocialIcon name="facebook" size={20} />
             {t('contact.facebook')}
+          </a>
+        </li>
+        <li data-config-wrap hidden>
+          <a
+            href="#"
+            data-config="tiktok"
+            hidden
+            class="btn-secondary inline-flex items-center gap-2"
+            target="_blank"
+            rel="noopener"
+          >
+            <SocialIcon name="tiktok" size={20} />
+            {t('contact.tiktok')}
           </a>
         </li>
         <li data-config-wrap hidden>

@@ -132,7 +132,8 @@ test.describe('home sections', () => {
   test('latest posts and author intro are shown', async ({ page }) => {
     await page.goto('');
     await expect(page.locator('#latest-h')).toBeVisible();
-    await expect(page.locator('article').filter({ hasText: 'එළිදැක්වේ' }).first()).toBeVisible();
+    // Any recent post (the newest change as posts are added).
+    await expect(page.locator('section:has(#latest-h) article').first()).toBeVisible();
     await expect(page.locator('#author-h')).toBeVisible();
   });
 });

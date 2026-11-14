@@ -64,7 +64,7 @@ export interface PublicConfig {
   bank: BankDetails;
   paymentInstructions: L10n;
   delivery: DeliveryConfig;
-  contact: { whatsappNumber: string; orderPhone: string; facebookPageUrl: string };
+  contact: { whatsappNumber: string; orderPhone: string; facebookPageUrl: string; tiktokUrl?: string };
   social: {
     reels: SocialLink[];
     videos: SocialLink[];

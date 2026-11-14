@@ -12,7 +12,12 @@ export const DEFAULT_PUBLIC_CONFIG: PublicConfig = {
     ta: 'ஆர்டரின் மொத்தத் தொகையைக் கீழே உள்ள கணக்கிற்கு மாற்றி, வங்கி ரசீதின் புகைப்படம் அல்லது PDF ஐப் பதிவேற்றவும்.',
   },
   delivery: { fees: {}, defaultFeeLKR: 0, perExtraCopyLKR: 0, estimateDays: { min: 2, max: 4 } },
-  contact: { whatsappNumber: '', orderPhone: '', facebookPageUrl: '' },
+  contact: {
+    whatsappNumber: '',
+    orderPhone: '',
+    facebookPageUrl: '',
+    tiktokUrl: 'https://www.tiktok.com/@lankanhistory',
+  },
   social: { reels: [], videos: [], storyOfWeek: null },
   bundle: { enabled: false, minQty: 2, percentOff: 0 },
   signedCopy: { enabled: false, surchargeLKR: 0 },

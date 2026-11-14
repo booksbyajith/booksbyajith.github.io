@@ -221,6 +221,7 @@ export const publicConfigSchema = z.strictObject({
     whatsappNumber: phoneDigits,
     orderPhone: phoneDigits,
     facebookPageUrl: optHttpsOrEmpty,
+    tiktokUrl: optHttpsOrEmpty.optional(),
   }),
   social: z.strictObject({
     reels: z.array(socialLink).max(6),

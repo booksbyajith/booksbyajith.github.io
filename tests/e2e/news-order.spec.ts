@@ -24,3 +24,20 @@ test('the order page shows how to order, with the settings bank details', async 
   await expect(box.locator('[data-config-text="whatsapp-number"]')).toHaveText('+94770000000');
   await expect(box.locator('a')).toHaveCount(0);
 });
+
+test('footer and contact page link to Facebook and TikTok with icons', async ({ page }) => {
+  await resetAll();
+  await page.goto('contact/');
+  const footer = page.locator('footer');
+  await expect(footer.locator('a[data-config="facebook"]')).toHaveAttribute(
+    'href',
+    'https://www.facebook.com/example',
+  );
+  await expect(footer.locator('a[data-config="tiktok"]')).toHaveAttribute(
+    'href',
+    'https://www.tiktok.com/@example',
+  );
+  await expect(footer.locator('a[data-config="tiktok"] svg')).toBeVisible();
+  await expect(page.locator('main a[data-config="tiktok"]')).toBeVisible();
+  await expect(page.locator('main a[data-config="facebook"] svg')).toBeVisible();
+});

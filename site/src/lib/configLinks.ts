@@ -27,6 +27,7 @@ export function initConfigLinks(): void {
       const kind = el.dataset.config;
       let url = '';
       if (kind === 'facebook') url = cfg.contact.facebookPageUrl;
+      else if (kind === 'tiktok') url = cfg.contact.tiktokUrl ?? '';
       else if (kind === 'whatsapp' && cfg.contact.whatsappNumber) {
         url = buildWaUrl(cfg.contact.whatsappNumber, el.dataset.waText ?? '');
         const label = el.querySelector('[data-wa-label]');
