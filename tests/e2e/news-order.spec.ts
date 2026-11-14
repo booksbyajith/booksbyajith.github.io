@@ -48,4 +48,6 @@ test('contact page shows the contact email from the settings', async ({ page }) 
   const email = page.locator('[data-testid="contact-email"]');
   await expect(email).toHaveAttribute('href', 'mailto:books@example.com');
   await expect(email).toContainText('books@example.com');
+  await expect(email.locator('svg[data-icon="email"]')).toHaveCount(1);
+  await expect(page.locator('main a[data-config="tiktok"] svg[data-icon="tiktok"]')).toHaveCount(1);
 });
