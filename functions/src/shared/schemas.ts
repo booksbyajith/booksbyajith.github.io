@@ -222,6 +222,7 @@ export const publicConfigSchema = z.strictObject({
     orderPhone: phoneDigits,
     facebookPageUrl: optHttpsOrEmpty,
     tiktokUrl: optHttpsOrEmpty.optional(),
+    email: z.union([z.literal(''), emailSchema]).optional(),
   }),
   social: z.strictObject({
     reels: z.array(socialLink).max(6),

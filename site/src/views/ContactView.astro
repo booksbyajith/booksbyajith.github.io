@@ -50,6 +50,18 @@ import SocialIcon from '../components/SocialIcon.astro';
           </a>
         </li>
         <li data-config-wrap hidden>
+          <a
+            href="#"
+            data-config="email"
+            hidden
+            class="btn-secondary inline-flex items-center gap-2"
+            data-testid="contact-email"
+          >
+            <SocialIcon name="email" size={20} />
+            <span data-email-label>{t('contact.email')}</span>
+          </a>
+        </li>
+        <li data-config-wrap hidden>
           <a href="#" data-config="phone" hidden class="btn-secondary">
             {t('contact.phone')} <span data-phone-label></span>
           </a>

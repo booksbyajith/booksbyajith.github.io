@@ -28,6 +28,11 @@ export function initConfigLinks(): void {
       let url = '';
       if (kind === 'facebook') url = cfg.contact.facebookPageUrl;
       else if (kind === 'tiktok') url = cfg.contact.tiktokUrl ?? '';
+      else if (kind === 'email' && cfg.contact.email) {
+        url = `mailto:${cfg.contact.email}`;
+        const label = el.querySelector('[data-email-label]');
+        if (label) label.textContent = cfg.contact.email;
+      }
       else if (kind === 'whatsapp' && cfg.contact.whatsappNumber) {
         url = buildWaUrl(cfg.contact.whatsappNumber, el.dataset.waText ?? '');
         const label = el.querySelector('[data-wa-label]');

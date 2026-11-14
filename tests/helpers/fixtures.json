@@ -21,7 +21,8 @@
         "whatsappNumber": "94770000000",
         "orderPhone": "94770000000",
         "facebookPageUrl": "https://www.facebook.com/example",
-        "tiktokUrl": "https://www.tiktok.com/@example"
+        "tiktokUrl": "https://www.tiktok.com/@example",
+        "email": "books@example.com"
       },
       "social": {
         "reels": [

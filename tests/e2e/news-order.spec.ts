@@ -41,3 +41,11 @@ test('footer and contact page link to Facebook and TikTok with icons', async ({ 
   await expect(page.locator('main a[data-config="tiktok"]')).toBeVisible();
   await expect(page.locator('main a[data-config="facebook"] svg')).toBeVisible();
 });
+
+test('contact page shows the contact email from the settings', async ({ page }) => {
+  await resetAll();
+  await page.goto('contact/');
+  const email = page.locator('[data-testid="contact-email"]');
+  await expect(email).toHaveAttribute('href', 'mailto:books@example.com');
+  await expect(email).toContainText('books@example.com');
+});

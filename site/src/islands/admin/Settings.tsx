@@ -275,6 +275,12 @@ export function Settings() {
           value={pub.contact.tiktokUrl ?? ''}
           onInput={(v) => setP('contact', { ...pub.contact, tiktokUrl: v })}
         />
+        <TextIn
+          label={t('admin.settings.contactEmail')}
+          type="email"
+          value={pub.contact.email ?? ''}
+          onInput={(v) => setP('contact', { ...pub.contact, email: v })}
+        />
         <SaveBar state={st('contact')} onSave={() => save('contact', { public: pick('contact') })} />
       </Section>
 
