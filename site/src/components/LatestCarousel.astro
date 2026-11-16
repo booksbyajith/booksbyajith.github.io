@@ -1,0 +1,111 @@
+---
+import type { Lang } from '@shared/constants';
+import { useT } from '../i18n';
+import PostCard from './PostCard.astro';
+
+interface Props {
+  lang: Lang;
+  items: { kind: 'news' | 'blog'; post: any }[];
+}
+const { lang, items } = Astro.props;
+const t = useT(lang);
+// Copies of the first cards follow the last, so the loop continues without a jump.
+const clones = items.slice(0, 3);
+---
+
+<div
+  class="post-carousel mt-8"
+  data-post-carousel
+  data-interval="5000"
+  data-label-pause={t('home.latest.pause')}
+  data-label-play={t('home.latest.play')}
+  role="region"
+  aria-roledescription="carousel"
+  aria-label={t('home.latest.title')}
+>
+  <div class="overflow-hidden" data-post-viewport>
+    <div class="post-track" data-post-track>
+      {items.map(({ kind, post }) => (
+        <div class="post-slide" data-card>
+          <PostCard lang={lang} kind={kind} post={post} headingLevel="h3" />
+        </div>
+      ))}
+      {clones.map(({ kind, post }) => (
+        <div class="post-slide" data-card data-clone aria-hidden="true" inert>
+          <PostCard lang={lang} kind={kind} post={post} headingLevel="h3" />
+        </div>
+      ))}
+    </div>
+  </div>
+  <div class="mt-5 flex items-center justify-center gap-2">
+    <button
+      type="button"
+      class="btn-quiet h-11 w-11 border border-line p-0 text-2xl"
+      data-prev
+      aria-label={t('home.latest.prev')}
+    >
+      ‹
+    </button>
+    <button
+      type="button"
+      class="carousel-toggle btn-quiet h-11 w-11 border border-line p-0"
+      data-toggle
+      aria-pressed="false"
+      aria-label={t('home.latest.pause')}
+      title={t('home.latest.pause')}
+    >
+      <svg class="i-pause" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">
+        <rect x="3" y="2" width="3.5" height="12" rx="1"></rect>
+        <rect x="9.5" y="2" width="3.5" height="12" rx="1"></rect>
+      </svg>
+      <svg class="i-play" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">
+        <path d="M4 2.5v11a1 1 0 0 0 1.5.86l9-5.5a1 1 0 0 0 0-1.72l-9-5.5A1 1 0 0 0 4 2.5z"></path>
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="btn-quiet h-11 w-11 border border-line p-0 text-2xl"
+      data-next
+      aria-label={t('home.latest.next')}
+    >
+      ›
+    </button>
+  </div>
+</div>
+
+<style>
+  .post-carousel {
+    --gap: 1.5rem;
+  }
+  .post-track {
+    display: flex;
+    gap: var(--gap);
+    transition: transform 0.7s var(--ease-out-soft);
+    will-change: transform;
+    touch-action: pan-y;
+  }
+  .post-slide {
+    flex: 0 0 100%;
+    display: flex;
+  }
+  .post-slide > :global(*) {
+    width: 100%;
+  }
+  @media (min-width: 768px) {
+    .post-slide {
+      flex-basis: calc((100% - 2 * var(--gap)) / 3);
+    }
+  }
+  .carousel-toggle .i-play,
+  [data-playing='false'] .carousel-toggle .i-pause {
+    display: none;
+  }
+  [data-playing='false'] .carousel-toggle .i-play {
+    display: block;
+  }
+</style>
+
+<script>
+  import { initPostCarousel } from '../lib/postCarousel';
+  document.querySelectorAll<HTMLElement>('[data-post-carousel]').forEach(initPostCarousel);
+</script>

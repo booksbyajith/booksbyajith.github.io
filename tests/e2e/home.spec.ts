@@ -137,3 +137,24 @@ test.describe('home sections', () => {
     await expect(page.locator('#author-h')).toBeVisible();
   });
 });
+
+test('latest articles slide one at a time, loop, and can be paused', async ({ page }) => {
+  await page.goto('');
+  const root = page.locator('[data-post-carousel]');
+  await root.scrollIntoViewIfNeeded();
+  const track = root.locator('[data-post-track]');
+  const x = () => track.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
+  expect(await x()).toBe(0);
+  // Copies used for the loop are hidden from screen readers and keyboards.
+  await expect(root.locator('[data-clone]').first()).toHaveAttribute('aria-hidden', 'true');
+  // Next moves one card left; previous from the first card wraps to the last.
+  await root.locator('[data-next]').click();
+  await expect.poll(x).toBeLessThan(0);
+  await root.locator('[data-prev]').click();
+  await expect.poll(x).toBe(0);
+  await root.locator('[data-prev]').click();
+  await expect.poll(x).toBeLessThan(0);
+  // Pause stops it.
+  await root.locator('[data-toggle]').click();
+  await expect(root).toHaveAttribute('data-playing', 'false');
+});

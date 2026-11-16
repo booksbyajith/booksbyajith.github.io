@@ -20,7 +20,7 @@ const t = useT(lang);
 const books = await getBooks();
 const featured = books.find((b) => b.featured) ?? books[0];
 const featuredText = await getBookText(featured.slug, lang);
-const latest = await getLatest(lang, 3);
+const latest = await getLatest(lang, 8);
 const front = featured.covers.find((c) => c.kind === 'front')!;
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -34,6 +34,7 @@ const authorIntro = {
   en: 'A medical specialist by profession, Dr. Ajith Amarasinghe is a member of the Royal Asiatic Society of Sri Lanka and the author of three historical research works.',
   ta: 'தொழில்ரீதியாக மருத்துவ நிபுணரான வைத்தியர் அஜித் அமரசிங்க, இலங்கை ராயல் ஆசியச் சங்கத்தின் உறுப்பினரும் மூன்று வரலாற்று ஆய்வு நூல்களின் ஆசிரியருமாவார்.',
 }[lang];
+import LatestCarousel from '../components/LatestCarousel.astro';
 ---
 
 <BaseLayout
@@ -135,13 +136,17 @@ const authorIntro = {
           {t('home.latest.all')} →
         </a>
       </div>
-      <div class="mt-8 grid gap-6 md:grid-cols-3">
-        {latest.map(({ kind, post }) => (
-          <div data-reveal>
-            <PostCard lang={lang} kind={kind} post={post} headingLevel="h3" />
-          </div>
-        ))}
-      </div>
+      {latest.length > 3 ? (
+        <LatestCarousel lang={lang} items={latest} />
+      ) : (
+        <div class="mt-8 grid gap-6 md:grid-cols-3">
+          {latest.map(({ kind, post }) => (
+            <div data-reveal>
+              <PostCard lang={lang} kind={kind} post={post} headingLevel="h3" />
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   )}
 
