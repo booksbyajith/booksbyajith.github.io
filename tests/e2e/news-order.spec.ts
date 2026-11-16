@@ -12,7 +12,7 @@ for (const path of ['news/how-to-order/', 'en/news/how-to-order/', 'ta/news/how-
     const wa = page.locator('article a[data-config="whatsapp"]');
     await expect(wa).toHaveText('+94770000000');
     await expect(wa).toHaveAttribute('href', /^https:\/\/wa\.me\/94770000000/);
-    await expect(page.locator('article a[href$="/order/"]')).toHaveCount(1);
+    await expect(page.locator('article a[href$="/order/"]')).toHaveCount(2);
   });
 }
 
