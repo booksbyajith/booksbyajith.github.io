@@ -33,3 +33,12 @@ import { href } from '../lib/paths';
     ))}
   </section>
 </BaseLayout>
+
+<script>
+  // Old links to the site's former /home/ address land here: forward them to the same page
+  // at the current address (keeping ?query and #order-number).
+  import { env } from '../lib/env';
+  import { legacyRedirect } from '../lib/legacyBase';
+  const to = legacyRedirect(location.pathname, env.base);
+  if (to) location.replace(to + location.search + location.hash);
+</script>

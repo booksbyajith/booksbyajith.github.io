@@ -8,8 +8,8 @@ Values used throughout (change them if yours differ):
 |---|---|
 | Firebase / Google Cloud project ID | `booksbyajith` |
 | Project number | `338840294291` |
-| GitHub repository | `booksbyajith/home` |
-| Website address | `https://booksbyajith.github.io/home/` |
+| GitHub repository | `booksbyajith/booksbyajith.github.io` |
+| Website address | `https://booksbyajith.github.io/` |
 | Site origin (no path) | `https://booksbyajith.github.io` |
 | Storage bucket (bank slips) | `booksbyajith-slips` |
 
@@ -33,14 +33,14 @@ Values used throughout (change them if yours differ):
 
 ---
 
-## 1. Code in the `booksbyajith/home` repository
+## 1. Code in the `booksbyajith/booksbyajith.github.io` repository
 
-The code is currently in `iamarasinghe96/booksbyajith` on the branch `claude/vibrant-darwin-7s0i1a`. It needs to be in **`booksbyajith/home`** on the branch **`main`**, because the website and workflows run from there.
+The code is currently in `iamarasinghe96/booksbyajith` on the branch `claude/vibrant-darwin-7s0i1a`. It needs to be in **`booksbyajith/booksbyajith.github.io`** on the branch **`main`**, because the website and workflows run from there.
 
-**Easiest:** give Claude access to `booksbyajith/home` and ask it to push the code there:
+**Easiest:** give Claude access to `booksbyajith/booksbyajith.github.io` and ask it to push the code there:
 
 1. Make sure the Claude GitHub App is installed on the `booksbyajith` account: <https://github.com/apps/claude/installations/select_target> → choose **booksbyajith** → allow **home**.
-2. In the Claude Code session settings, add the repository `booksbyajith/home` (or start a new session with it selected), and say "push the code to booksbyajith/home main".
+2. In the Claude Code session settings, add the repository `booksbyajith/booksbyajith.github.io` (or start a new session with it selected), and say "push the code to booksbyajith/booksbyajith.github.io main".
 
 **Without Claude (all in the browser):**
 
@@ -49,7 +49,7 @@ The code is currently in `iamarasinghe96/booksbyajith` on the branch `claude/vib
 3. Owner: **booksbyajith**. Name: **home** (if `home` already exists and is empty, delete it first in its **Settings → Danger zone**). Click **Begin import**.
 4. In the imported repository, open **Branches**, find `claude/vibrant-darwin-7s0i1a`, open a **pull request into `main`** and merge it. (If `main` doesn't exist yet, go to **Settings → General → Default branch** and switch it to `claude/vibrant-darwin-7s0i1a`, then rename that branch to `main` on the **Branches** page.)
 
-**Expected:** `booksbyajith/home` → `main` shows the folders `site`, `functions`, `firebase`, `scripts`, `tests` and `.github`. Do steps 9 onwards in **this** repository.
+**Expected:** `booksbyajith/booksbyajith.github.io` → `main` shows the folders `site`, `functions`, `firebase`, `scripts`, `tests` and `.github`. Do steps 9 onwards in **this** repository.
 
 ---
 
@@ -95,7 +95,7 @@ Firebase console → **Authentication → Settings → Authorized domains → Ad
 booksbyajith.github.io
 ```
 
-Only the host name: no `https://`, no `/home`. GitHub Pages serves every repository of the `booksbyajith` account from this one host; `/home` is only the path.
+Only the host name: no `https://`, no path.
 
 **Expected:** `booksbyajith.github.io` is listed next to `localhost` and `booksbyajith.firebaseapp.com`.
 
@@ -114,7 +114,7 @@ Firebase no longer accepts new reCAPTCHA Classic registrations, so the site uses
    - Leave "Use checkbox challenge" **off** (score-based). **Create key**, then copy the **key ID**.
 3. Paste the key ID into the App Check form → **Save**. The **site** row becomes **Registered**.
 4. **App Check → APIs**: leave Cloud Firestore, Cloud Storage and Authentication **Unenforced**.
-5. GitHub `booksbyajith/home` variable `PUBLIC_RECAPTCHA_SITE_KEY` = the same key ID.
+5. GitHub `booksbyajith/booksbyajith.github.io` variable `PUBLIC_RECAPTCHA_SITE_KEY` = the same key ID.
 
 ## 7. Service account for deployments (redo)
 
@@ -155,9 +155,9 @@ Do this after the first functions deploy (step 11), because the account it chang
 
 **Expected:** the account is listed with the role "Service Account Token Creator". Admins can now open bank slips.
 
-## 9. GitHub settings in `booksbyajith/home`
+## 9. GitHub settings in `booksbyajith/booksbyajith.github.io`
 
-Yes — everything in this step must be in **`booksbyajith/home`**, because that is where the site and workflows run. If you set variables in the old repository, set them again here.
+Yes — everything in this step must be in **`booksbyajith/booksbyajith.github.io`**, because that is where the site and workflows run. If you set variables in the old repository, set them again here.
 
 1. **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 2. **Settings → Secrets and variables → Actions → Variables** — fix these two and add the missing ones:
@@ -165,7 +165,7 @@ Yes — everything in this step must be in **`booksbyajith/home`**, because that
 | Variable | Value |
 |---|---|
 | `ALLOWED_ORIGINS` | `https://booksbyajith.github.io` ← fix: replace the `<owner>` placeholder |
-| `SITE_URL` | `https://booksbyajith.github.io/home` ✅ (no trailing slash) |
+| `SITE_URL` | `https://booksbyajith.github.io` (no trailing slash) |
 | `FIREBASE_PROJECT_ID` | `booksbyajith` ✅ |
 | `PUBLIC_FIREBASE_PROJECT_ID` | `booksbyajith` ← **missing**, add it |
 | `PUBLIC_FIREBASE_API_KEY` | ✅ |
@@ -221,11 +221,11 @@ GitHub → **Actions → Admin tools → Run workflow** → task **seed**.
 
 GitHub → **Actions → Deploy site to GitHub Pages → Run workflow** (it also runs automatically on every push to `main`).
 
-**Expected:** a green run and the site at **<https://booksbyajith.github.io/home/>**. The order page says ordering is not open yet — correct until step 15.
+**Expected:** a green run and the site at **<https://booksbyajith.github.io/>**. The order page says ordering is not open yet — correct until step 15.
 
 ## 14. Grant admin access
 
-1. Each admin opens **<https://booksbyajith.github.io/home/admin/>** → **Sign in with Google**. They see **"Not authorised"** — that creates their account.
+1. Each admin opens **<https://booksbyajith.github.io/admin/>** → **Sign in with Google**. They see **"Not authorised"** — that creates their account.
 2. Make sure their Google address is in the `ADMIN_EMAILS` secret (step 9).
 3. GitHub → **Actions → Admin tools → Run workflow** → task **grant-admins**.
 4. They click **Check again** (or sign out and in).
@@ -236,7 +236,7 @@ To remove someone: temporarily set `ADMIN_EMAILS` to **only that person**, run t
 
 ## 14b. Give the packing staff access (optional)
 
-The staff page is **https://booksbyajith.github.io/home/staff/** (not linked from the site). Staff see only orders whose payment you have verified, print postal labels (6 per A4, cut along the dashed lines) and scan each label's QR code when the parcel is packed. The order then shows **Packed – ready to post** on the customer's tracking page, and customers who gave an email get a short email.
+The staff page is **https://booksbyajith.github.io/staff/** (not linked from the site). Staff see only orders whose payment you have verified, print postal labels (6 per A4, cut along the dashed lines) and scan each label's QR code when the parcel is packed. The order then shows **Packed – ready to post** on the customer's tracking page, and customers who gave an email get a short email.
 
 1. The staff member opens the staff page once and signs in with their Google account.
 2. GitHub → **Settings → Secrets and variables → Actions → New repository secret**: name `STAFF_EMAILS`, value the staff Google address(es), comma-separated. Keep this address out of every other file.
@@ -293,8 +293,8 @@ Please have the author (or a Sinhala editor, and a Tamil editor for the Tamil pa
 
 ## 18. Optional: custom domain (e.g. `books.example.lk`)
 
-1. `booksbyajith/home` → **Settings → Pages → Custom domain** → enter the domain → Save. At your domain registrar, create the DNS record GitHub shows (a `CNAME` pointing to `booksbyajith.github.io`). Tick **Enforce HTTPS** when it becomes available.
-2. Update variables: `SITE_URL` = `https://books.example.lk` (no `/home`), `ALLOWED_ORIGINS` = `https://books.example.lk`.
+1. `booksbyajith/booksbyajith.github.io` → **Settings → Pages → Custom domain** → enter the domain → Save. At your domain registrar, create the DNS record GitHub shows (a `CNAME` pointing to `booksbyajith.github.io`). Tick **Enforce HTTPS** when it becomes available.
+2. Update variables: `SITE_URL` = `https://books.example.lk`, `ALLOWED_ORIGINS` = `https://books.example.lk`.
 3. Firebase → Authentication → Authorized domains → add `books.example.lk`.
 4. reCAPTCHA admin → your key → Domains → add `books.example.lk`.
 5. Run **Deploy Firebase** (functions only) and then **Deploy site**.
@@ -360,7 +360,7 @@ Do this once with real money and your own phone:
 |---|---|
 | reCAPTCHA says "domain is invalid" | Enter only `booksbyajith.github.io` — no `https://`, no path, no slash. |
 | "Not authorised" after **grant-admins** | Click **Check again**, or sign out and in. |
-| **grant-admins** says "User not found" | That person must sign in once at `/home/admin/` first. Check the spelling in `ADMIN_EMAILS`. |
+| **grant-admins** says "User not found" | That person must sign in once at `/admin/` first. Check the spelling in `ADMIN_EMAILS`. |
 | Every order/track/form action fails with `unauthenticated` | The reCAPTCHA site key (variable) and secret key (App Check) must be from the same key, and `booksbyajith.github.io` must be on that key. Run **Deploy site** after changing the variable. |
 | Browser shows CORS errors | `ALLOWED_ORIGINS` must be exactly `https://booksbyajith.github.io`. Run **Deploy Firebase** (functions) after changing it. |
 | Bank slip won't open in admin | Do step 8 and check `STORAGE_BUCKET`. |
@@ -370,3 +370,14 @@ Do this once with real money and your own phone:
 | Admin shows "query requires an index" | Run **Deploy Firebase** with indexes ticked and wait a few minutes. |
 | Order page says ordering is not open | Admin → Settings → Ordering → **Orders open**, and the bank account number must be filled in. |
 | Site build fails: "Missing or invalid public build configuration" | A variable from step 9 is missing or misspelled (most often `PUBLIC_FIREBASE_PROJECT_ID`). |
+
+
+## Old `/home/` links
+
+Until November 2026 the site lived at `https://booksbyajith.github.io/home/` (repository `booksbyajith/home`).
+The repository was renamed to `booksbyajith.github.io` so the site opens at the plain address.
+
+- Old links that reach the site's 404 page are forwarded to the same page at the new address
+  (`site/src/lib/legacyBase.ts`), and visitors' old offline copy under `/home/` is removed.
+- A small repository named `home` serves redirect pages at the old addresses, so links already
+  shared on Facebook, printed QR codes and sent emails keep working and show their previews.

@@ -1,6 +1,7 @@
 import { trackPageView, loadPixel } from './analytics';
 import { initConfigLinks } from './configLinks';
 import { env } from './env';
+import { legacyRedirect } from './legacyBase';
 import { asset } from './paths';
 
 const KEY = 'aj.pixelConsent';
@@ -43,6 +44,16 @@ export function initClient(): void {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register(asset('/sw.js'), { scope: asset('/') }).catch(() => undefined);
+      // Remove the offline copy left by the site's old /home/ address, so it can't keep
+      // serving outdated pages there.
+      void navigator.serviceWorker
+        .getRegistrations()
+        .then((regs) =>
+          regs
+            .filter((r) => legacyRedirect(new URL(r.scope).pathname, env.base) !== null)
+            .forEach((r) => void r.unregister()),
+        )
+        .catch(() => undefined);
     });
   }
 }
