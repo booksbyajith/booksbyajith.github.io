@@ -41,7 +41,9 @@ await page.locator('[data-slip-button]').waitFor();
 await page.waitForTimeout(800);
 // Start the view just above the step tabs.
 await page.evaluate(() => {
-  const tabs = document.querySelector('[data-order-app] ol, [data-order-app] [role="tablist"], [data-order-app] nav');
+  const tabs = document.querySelector(
+    '[data-order-app] ol, [data-order-app] [role="tablist"], [data-order-app] nav',
+  );
   const y = tabs ? tabs.getBoundingClientRect().top + window.scrollY - 90 : 0;
   window.scrollTo(0, y);
 });
