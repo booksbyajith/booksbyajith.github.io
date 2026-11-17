@@ -1,10 +1,11 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import type { Lang } from '@shared/constants';
-import { absUrl, href, LANGS } from '../lib/paths';
+import { absUrl, asset, href, LANGS } from '../lib/paths';
 import { STATIC_ROUTES } from '../lib/routes';
 
-type Entry = { paths: Partial<Record<Lang, string>>; priority: number; lastmod?: string };
+/** images: site paths of pictures on the page (book covers), listed for Google Images. */
+type Entry = { paths: Partial<Record<Lang, string>>; priority: number; lastmod?: string; images?: string[] };
 
 const all = (path: string) => Object.fromEntries(LANGS.map((l) => [l, path])) as Record<Lang, string>;
 
@@ -13,7 +14,11 @@ export const GET: APIRoute = async () => {
   for (const r of STATIC_ROUTES.filter((r) => r.sitemap))
     urls.push({ paths: all(r.path), priority: r.priority });
   for (const b of await getCollection('bookFacts'))
-    urls.push({ paths: all(`/books/${b.data.slug}/`), priority: 0.9 });
+    urls.push({
+      paths: all(`/books/${b.data.slug}/`),
+      priority: 0.9,
+      images: b.data.covers.map((c) => `/covers/${c.file}`),
+    });
   for (const kind of ['news', 'blog'] as const) {
     // Group translations of the same post so each URL lists its alternates.
     const groups = new Map<string, Entry>();
@@ -36,7 +41,10 @@ export const GET: APIRoute = async () => {
             .map(([l, p]) => `<xhtml:link rel="alternate" hreflang="${l}" href="${absUrl(href(l, p))}"/>`)
             .join('')
         : '';
-    return `<url><loc>${loc}</loc>${u.lastmod ? `<lastmod>${u.lastmod}</lastmod>` : ''}${links}<priority>${u.priority.toFixed(1)}</priority></url>`;
+    const images = (u.images ?? [])
+      .map((i) => `<image:image><image:loc>${absUrl(asset(i))}</image:loc></image:image>`)
+      .join('');
+    return `<url><loc>${loc}</loc>${u.lastmod ? `<lastmod>${u.lastmod}</lastmod>` : ''}${links}${images}<priority>${u.priority.toFixed(1)}</priority></url>`;
   };
   const body = urls
     .flatMap((u) =>
@@ -44,7 +52,7 @@ export const GET: APIRoute = async () => {
     )
     .join('\n');
   return new Response(
-    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${body}\n</urlset>\n`,
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n${body}\n</urlset>\n`,
     { headers: { 'Content-Type': 'application/xml; charset=utf-8' } },
   );
 };
