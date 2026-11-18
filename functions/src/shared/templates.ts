@@ -3,14 +3,19 @@ import type { L10n, Lang, TemplateKey } from './types.js';
 
 export const DEFAULT_TEMPLATES: Record<TemplateKey, L10n> = {
   acknowledged: {
-    en: 'Thank you for ordering {bookTitles}, {name}! 🙏 Your order number is {orderId}. We will verify your bank transfer shortly and start preparing your book.',
-    si: '{name}, {bookTitles} ඇණවුම් කිරීම ගැන ඔබට ස්තුතියි! 🙏 ඔබගේ ඇණවුම් අංකය {orderId}. අපි ඔබගේ බැංකු තැන්පතුව ඉක්මනින් තහවුරු කර පොත සූදානම් කිරීම අරඹන්නෙමු.',
-    ta: '{bookTitles} ஆர்டர் செய்ததற்கு நன்றி, {name}! 🙏 உங்கள் ஆர்டர் எண் {orderId}. உங்கள் வங்கிப் பரிமாற்றத்தை விரைவில் சரிபார்த்து, புத்தகத்தைத் தயார் செய்யத் தொடங்குவோம்.',
+    en: 'Thank you for ordering {bookTitles}, {name}! 🙏 Your order number is {orderId}. We will verify your bank transfer shortly and start preparing your book. Track your order here: {trackingUrl}',
+    si: '{name}, {bookTitles} ඇණවුම් කිරීම ගැන ඔබට ස්තුතියි! 🙏 ඔබගේ ඇණවුම් අංකය {orderId}. අපි ඔබගේ බැංකු තැන්පතුව ඉක්මනින් තහවුරු කර පොත සූදානම් කිරීම අරඹන්නෙමු. ඔබගේ ඇණවුම මෙතැනින් පරීක්ෂා කරන්න: {trackingUrl}',
+    ta: '{bookTitles} ஆர்டர் செய்ததற்கு நன்றி, {name}! 🙏 உங்கள் ஆர்டர் எண் {orderId}. உங்கள் வங்கிப் பரிமாற்றத்தை விரைவில் சரிபார்த்து, புத்தகத்தைத் தயார் செய்யத் தொடங்குவோம். உங்கள் ஆர்டரை இங்கே கண்காணிக்கவும்: {trackingUrl}',
   },
   payment_verified: {
-    en: 'Your payment for order {orderId} has been verified ✅. We are now preparing your book for dispatch.',
-    si: 'ඇණවුම් අංක {orderId} සඳහා ඔබගේ ගෙවීම තහවුරු විය ✅. අපි දැන් ඔබගේ පොත යැවීමට සූදානම් කරමින් සිටිමු.',
-    ta: 'ஆர்டர் {orderId} க்கான உங்கள் கட்டணம் சரிபார்க்கப்பட்டது ✅. உங்கள் புத்தகத்தை அனுப்புவதற்குத் தயார் செய்து வருகிறோம்.',
+    en: 'Thank you very much for your order, {name}! 🙏 Your payment for order {orderId} ({bookTitles}) has been verified ✅ and we are now preparing your book for posting. Track your order here: {trackingUrl}',
+    si: '{name}, ඔබගේ ඇණවුමට අපගේ හෘදයාංගම ස්තුතිය! 🙏 ඇණවුම් අංක {orderId} ({bookTitles}) සඳහා ඔබගේ ගෙවීම තහවුරු විය ✅. අපි දැන් ඔබගේ පොත තැපැල් කිරීමට සූදානම් කරමින් සිටිමු. ඔබගේ ඇණවුම මෙතැනින් පරීක්ෂා කරන්න: {trackingUrl}',
+    ta: '{name}, உங்கள் ஆர்டருக்கு எங்கள் மனமார்ந்த நன்றி! 🙏 ஆர்டர் {orderId} ({bookTitles}) க்கான உங்கள் கட்டணம் சரிபார்க்கப்பட்டது ✅. உங்கள் புத்தகத்தைத் தபாலில் அனுப்பத் தயார் செய்து வருகிறோம். உங்கள் ஆர்டரை இங்கே கண்காணிக்கவும்: {trackingUrl}',
+  },
+  packed: {
+    en: 'Your order {orderId} ({bookTitles}) is packed and will be posted shortly 📦. Track your order here: {trackingUrl}',
+    si: 'ඔබගේ ඇණවුම {orderId} ({bookTitles}) ඇසුරුම් කර ඇති අතර ඉක්මනින් තැපැල් කරනු ලැබේ 📦. ඔබගේ ඇණවුම මෙතැනින් පරීක්ෂා කරන්න: {trackingUrl}',
+    ta: 'உங்கள் ஆர்டர் {orderId} ({bookTitles}) பொதி செய்யப்பட்டது, விரைவில் தபாலில் அனுப்பப்படும் 📦. உங்கள் ஆர்டரை இங்கே கண்காணிக்கவும்: {trackingUrl}',
   },
   dispatched: {
     en: 'Good news! Your order {orderId} ({bookTitles}) has been posted via {courier}, tracking number {trackingNo}. You should receive it within 3 days. Track it here: {trackingUrl}. Follow our Facebook page for history stories: {facebookUrl}',
@@ -26,6 +31,21 @@ export const DEFAULT_TEMPLATES: Record<TemplateKey, L10n> = {
     en: 'Good news! {bookTitles} is available again. Order here: {orderUrl}',
     si: 'සුබ ආරංචියක්! {bookTitles} නැවත ලබා ගත හැක. මෙතැනින් ඇණවුම් කරන්න: {orderUrl}',
     ta: 'நல்ல செய்தி! {bookTitles} மீண்டும் கிடைக்கிறது. இங்கே ஆர்டர் செய்யுங்கள்: {orderUrl}',
+  },
+};
+
+/** Earlier default texts. A saved template still equal to one of these was never edited, so
+ *  the current default (with the tracking link) is used instead. Edited templates are kept. */
+export const LEGACY_TEMPLATES: Partial<Record<TemplateKey, L10n>> = {
+  acknowledged: {
+    en: 'Thank you for ordering {bookTitles}, {name}! 🙏 Your order number is {orderId}. We will verify your bank transfer shortly and start preparing your book.',
+    si: '{name}, {bookTitles} ඇණවුම් කිරීම ගැන ඔබට ස්තුතියි! 🙏 ඔබගේ ඇණවුම් අංකය {orderId}. අපි ඔබගේ බැංකු තැන්පතුව ඉක්මනින් තහවුරු කර පොත සූදානම් කිරීම අරඹන්නෙමු.',
+    ta: '{bookTitles} ஆர்டர் செய்ததற்கு நன்றி, {name}! 🙏 உங்கள் ஆர்டர் எண் {orderId}. உங்கள் வங்கிப் பரிமாற்றத்தை விரைவில் சரிபார்த்து, புத்தகத்தைத் தயார் செய்யத் தொடங்குவோம்.',
+  },
+  payment_verified: {
+    en: 'Your payment for order {orderId} has been verified ✅. We are now preparing your book for dispatch.',
+    si: 'ඇණවුම් අංක {orderId} සඳහා ඔබගේ ගෙවීම තහවුරු විය ✅. අපි දැන් ඔබගේ පොත යැවීමට සූදානම් කරමින් සිටිමු.',
+    ta: 'ஆர்டர் {orderId} க்கான உங்கள் கட்டணம் சரிபார்க்கப்பட்டது ✅. உங்கள் புத்தகத்தை அனுப்புவதற்குத் தயார் செய்து வருகிறோம்.',
   },
 };
 

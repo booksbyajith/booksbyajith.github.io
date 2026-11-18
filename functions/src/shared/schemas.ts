@@ -177,6 +177,16 @@ export type UpdateOrderStatusInput = z.infer<typeof updateOrderStatusSchema>;
 
 export const addOrderNoteSchema = z.object({ orderId: orderIdSchema, note: text(1, 1000) });
 export const getSlipUrlSchema = z.object({ orderId: orderIdSchema });
+/** Correcting a delivery address (the district stays the same: it decides the delivery fee). */
+export const updateOrderAddressSchema = z.object({
+  orderId: orderIdSchema,
+  line1: text(3, 120),
+  line2: optText(120),
+  city: text(2, 60),
+  postalCode: z.string().trim().max(12),
+  country: optText(60),
+  landmark: optText(200),
+});
 
 const phoneDigits = z
   .string()

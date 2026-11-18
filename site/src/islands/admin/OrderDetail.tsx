@@ -1,3 +1,4 @@
+import { mergePrivateConfig } from '@shared/defaults';
 import { l10nText as tl } from '@shared/l10n';
 import { OVERSEAS, regionLine } from '@shared/districts';
 import { formatLKR } from '@shared/pricing';
@@ -37,6 +38,9 @@ export function OrderDetail({ orderId }: { orderId: string }) {
   const [err, setErr] = useState<string | null>(null);
   const [waUrl, setWaUrl] = useState<string | null>(null);
   const [note, setNote] = useState('');
+  const [addrEdit, setAddrEdit] = useState<Record<string, string> | null>(null);
+  const [addrErr, setAddrErr] = useState<string | null>(null);
+  const [addrBusy, setAddrBusy] = useState(false);
   const [slip, setSlip] = useState<{ url: string; type: string } | null>(null);
 
   useEffect(() => {
@@ -56,7 +60,10 @@ export function OrderDetail({ orderId }: { orderId: string }) {
         ),
       );
       setPub((await fs.getDoc(fs.doc(db, 'config/public'))).data() as PublicConfig);
-      setPriv((await fs.getDoc(fs.doc(db, 'config/private'))).data() as PrivateConfig);
+      // Merged with the defaults, so messages added later (e.g. 'packed') are available.
+      setPriv(
+        mergePrivateConfig((await fs.getDoc(fs.doc(db, 'config/private'))).data() as Partial<PrivateConfig>),
+      );
     })();
     return () => unsubs.forEach((u) => u());
   }, [orderId]);
@@ -193,9 +200,9 @@ export function OrderDetail({ orderId }: { orderId: string }) {
               {t(ACTION[to])}
             </button>
           ))}
-          {resendUrl && (
-            <a class="btn-quiet" href={resendUrl} target="_blank" rel="noopener" data-testid="resend-wa">
-              {t('admin.action.resend')} ↗
+          {resendUrl && !waUrl && (
+            <a class="btn-secondary" href={resendUrl} target="_blank" rel="noopener" data-testid="resend-wa">
+              {t('admin.action.whatsappStage', { status: t(`status.${order.status}` as I18nKey) })} ↗
             </a>
           )}
         </div>
@@ -303,12 +310,97 @@ export function OrderDetail({ orderId }: { orderId: string }) {
           <p class="text-sm text-ink-soft">{{ si: 'සිංහල', en: 'English', ta: 'தமிழ்' }[order.lang]}</p>
         </Section>
         <Section title={t('admin.order.address')}>
-          <p data-testid="detail-address">
-            {[a.line1, a.line2, a.city].filter(Boolean).join(', ')}
-            <br />
-            {regionLine(a, lang)}
-          </p>
-          {a.landmark && <p class="text-sm">{a.landmark}</p>}
+          {addrEdit ? (
+            <form
+              class="grid gap-2"
+              data-testid="address-form"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setAddrBusy(true);
+                setAddrErr(null);
+                try {
+                  await call('updateOrderAddress', { orderId, ...addrEdit });
+                  setAddrEdit(null);
+                } catch (err) {
+                  const ce = callError(err);
+                  setAddrErr(
+                    ce.fields.length ? `${t('admin.error.missing')} (${ce.fields.join(', ')})` : ce.status,
+                  );
+                } finally {
+                  setAddrBusy(false);
+                }
+              }}
+            >
+              {(
+                [
+                  ['line1', 'order.field.line1'],
+                  ['line2', 'order.field.line2'],
+                  ['city', 'order.field.city'],
+                  ['postalCode', 'order.field.postalCode'],
+                  ...(a.districtId === OVERSEAS ? [['country', 'order.field.country']] : []),
+                  ['landmark', 'order.field.landmark'],
+                ] as [string, I18nKey][]
+              ).map(([k, label]) => (
+                <label class="text-sm" key={k}>
+                  {t(label)}
+                  <input
+                    class="field-input mt-1"
+                    name={`addr-${k}`}
+                    value={addrEdit[k] ?? ''}
+                    onInput={(e) =>
+                      setAddrEdit({ ...addrEdit, [k]: (e.currentTarget as HTMLInputElement).value })
+                    }
+                  />
+                </label>
+              ))}
+              {addrErr && (
+                <p class="field-error" role="alert">
+                  {addrErr}
+                </p>
+              )}
+              <p class="mt-1 flex flex-wrap gap-2">
+                <button type="submit" class="btn-primary" disabled={addrBusy} data-testid="address-save">
+                  {t('admin.order.saveAddress')}
+                </button>
+                <button
+                  type="button"
+                  class="btn-secondary"
+                  onClick={() => setAddrEdit(null)}
+                  disabled={addrBusy}
+                >
+                  {t('admin.order.cancelEdit')}
+                </button>
+              </p>
+            </form>
+          ) : (
+            <>
+              <p data-testid="detail-address">
+                {[a.line1, a.line2, a.city].filter(Boolean).join(', ')}
+                <br />
+                {regionLine(a, lang)}
+              </p>
+              {a.landmark && <p class="text-sm">{a.landmark}</p>}
+              <p class="mt-2">
+                <button
+                  type="button"
+                  class="btn-quiet min-h-9 px-2 py-0 text-sm"
+                  data-testid="address-edit"
+                  onClick={() =>
+                    setAddrEdit({
+                      line1: a.line1,
+                      line2: a.line2 ?? '',
+                      city: a.city,
+                      postalCode: a.postalCode,
+                      country: a.country ?? '',
+                      landmark: a.landmark ?? '',
+                    })
+                  }
+                >
+                  ✎ {t('admin.order.editAddress')}
+                </button>
+              </p>
+            </>
+          )}
           {order.geo && (
             <p class="mt-2">
               <a

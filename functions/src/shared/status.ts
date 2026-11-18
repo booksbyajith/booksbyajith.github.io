@@ -51,6 +51,7 @@ export function templateKeyFor(to: OrderStatus): Exclude<TemplateKey, 'back_in_s
   switch (to) {
     case 'acknowledged':
     case 'payment_verified':
+    case 'packed':
     case 'dispatched':
     case 'rejected':
       return to;

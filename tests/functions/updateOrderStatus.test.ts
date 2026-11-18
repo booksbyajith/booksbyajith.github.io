@@ -23,9 +23,12 @@ describe('updateOrderStatus', () => {
     expect(ack.error).toBeUndefined();
     expect(ack.result.waUrl.startsWith('https://wa.me/94770000001?text=')).toBe(true);
     // Order language is Sinhala.
-    expect(decode(ack.result.waUrl)).toBe(
-      `Test Customer, ලංකාවේ පෘතුගීසි සිටි යුගය (1505-1594) ඇණවුම් කිරීම ගැන ඔබට ස්තුතියි! 🙏 ඔබගේ ඇණවුම් අංකය ${orderId}. අපි ඔබගේ බැංකු තැන්පතුව ඉක්මනින් තහවුරු කර පොත සූදානම් කිරීම අරඹන්නෙමු.`,
+    const si = decode(ack.result.waUrl);
+    expect(si).toContain(
+      `Test Customer, ලංකාවේ පෘතුගීසි සිටි යුගය (1505-1594) ඇණවුම් කිරීම ගැන ඔබට ස්තුතියි! 🙏 ඔබගේ ඇණවුම් අංකය ${orderId}. අපි ඔබගේ බැංකු තැන්පතුව ඉක්මනින් තහවුරු කර පොත සූදානම් කිරීම අරඹන්නෙමු. ඔබගේ ඇණවුම මෙතැනින් පරීක්ෂා කරන්න: `,
     );
+    // The order's own tracking link.
+    expect(si.endsWith(`/track/#${orderId}`)).toBe(true);
     expect((await move('payment_verified')).result.status).toBe('payment_verified');
     const d = await move('dispatched', { courier: 'Demo Courier', trackingNo: 'TRK123' });
     expect(d.error).toBeUndefined();
@@ -74,9 +77,11 @@ describe('updateOrderStatus', () => {
     ).result.orderId;
     const r = await call('updateOrderStatus', { orderId: en, to: 'acknowledged' }, { idToken: admin });
     expect(r.result.waUrl.startsWith('https://wa.me/447911123456?text=')).toBe(true);
-    expect(decode(r.result.waUrl)).toBe(
-      `Thank you for ordering The Portuguese in Sri Lanka (1505–1594), English Reader! 🙏 Your order number is ${en}. We will verify your bank transfer shortly and start preparing your book.`,
+    const text = decode(r.result.waUrl);
+    expect(text).toContain(
+      `Thank you for ordering The Portuguese in Sri Lanka (1505–1594), English Reader! 🙏 Your order number is ${en}. We will verify your bank transfer shortly and start preparing your book. Track your order here: `,
     );
+    expect(text.endsWith(`/en/track/#${en}`)).toBe(true);
   });
 
   it('rejects every invalid transition', async () => {
@@ -132,5 +137,46 @@ describe('updateOrderStatus', () => {
       'PERMISSION_DENIED',
     );
     expect((await db.doc(`orders/${orderId}`).get()).get('status')).toBe('pending_verification');
+  });
+});
+
+describe('updateOrderAddress', () => {
+  it('lets admins correct the address and logs which fields changed', async () => {
+    const r = await call(
+      'updateOrderAddress',
+      {
+        orderId,
+        line1: '421/I/1 Colombo Road',
+        line2: 'Namaldeniya',
+        city: 'Parakaduwa',
+        postalCode: '70550',
+        landmark: '',
+      },
+      { idToken: admin },
+    );
+    expect(r.error).toBeUndefined();
+    const order = (await db.doc(`orders/${orderId}`).get()).data()!;
+    expect(order.address.line1).toBe('421/I/1 Colombo Road');
+    expect(order.address.city).toBe('Parakaduwa');
+    expect(order.address.districtId).toBeTruthy();
+    const audit = await db.collection(`orders/${orderId}/audit`).where('type', '==', 'address').get();
+    expect(audit.size).toBe(1);
+    expect(audit.docs[0].get('meta.fields')).toContain('line1');
+    // The audit entry names the fields only, never the address itself.
+    expect(JSON.stringify(audit.docs[0].data())).not.toContain('Colombo Road');
+  });
+  it('rejects a bad postal code and non-staff users', async () => {
+    const bad = await call(
+      'updateOrderAddress',
+      { orderId, line1: '12 Temple Road', line2: '', city: 'Kandy', postalCode: '12', landmark: '' },
+      { idToken: admin },
+    );
+    expect(bad.error?.details?.code).toBe('VALIDATION');
+    const user = await call(
+      'updateOrderAddress',
+      { orderId, line1: '12 Temple Road', line2: '', city: 'Kandy', postalCode: '20000', landmark: '' },
+      { idToken: await userToken() },
+    );
+    expect(user.error?.status).toBe('PERMISSION_DENIED');
   });
 });

@@ -4,6 +4,7 @@ export { createOrder } from './callables/createOrder.js';
 export { trackOrder } from './callables/trackOrder.js';
 export { updateOrderStatus } from './callables/updateOrderStatus.js';
 export { addOrderNote } from './callables/addOrderNote.js';
+export { updateOrderAddress } from './callables/updateOrderAddress.js';
 export { getSlipUrl } from './callables/getSlipUrl.js';
 export { staffOrders } from './callables/staffOrders.js';
 export { updateSettings } from './callables/updateSettings.js';

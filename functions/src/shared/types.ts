@@ -91,6 +91,7 @@ export interface PublicConfig {
 export const TEMPLATE_KEYS = [
   'acknowledged',
   'payment_verified',
+  'packed',
   'dispatched',
   'rejected',
   'back_in_stock',
@@ -172,7 +173,7 @@ export interface OrderDoc {
   search: string[];
 }
 
-export type AuditType = 'status' | 'note' | 'slip_view' | 'anonymise';
+export type AuditType = 'status' | 'note' | 'slip_view' | 'anonymise' | 'address';
 
 export interface AuditEvent {
   type: AuditType;

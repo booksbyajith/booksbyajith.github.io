@@ -1,6 +1,8 @@
+import { mergePrivateConfig } from './defaults.js';
 import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_TEMPLATES,
+  LEGACY_TEMPLATES,
   bookTitles,
   buildCourierTrackingUrl,
   buildMapsUrl,
@@ -23,10 +25,24 @@ describe('renderTemplate', () => {
         bookTitles: 'Finding Sinhabahu',
         name: 'Nimal',
         orderId: 'AJ-2611-7K3Q',
+        trackingUrl: 'https://example.com/en/track/#AJ-2611-7K3Q',
       }),
     ).toBe(
-      'Thank you for ordering Finding Sinhabahu, Nimal! 🙏 Your order number is AJ-2611-7K3Q. We will verify your bank transfer shortly and start preparing your book.',
+      'Thank you for ordering Finding Sinhabahu, Nimal! 🙏 Your order number is AJ-2611-7K3Q. We will verify your bank transfer shortly and start preparing your book. Track your order here: https://example.com/en/track/#AJ-2611-7K3Q',
     );
+  });
+  it('upgrades never-edited saved templates but keeps edited ones', () => {
+    const merged = mergePrivateConfig({
+      templates: {
+        acknowledged: { ...LEGACY_TEMPLATES.acknowledged! },
+        payment_verified: { si: 'Edited by admin', en: LEGACY_TEMPLATES.payment_verified!.en },
+      } as never,
+    });
+    expect(merged.templates.acknowledged.en).toBe(DEFAULT_TEMPLATES.acknowledged.en);
+    expect(merged.templates.acknowledged.si).toContain('{trackingUrl}');
+    expect(merged.templates.payment_verified.si).toBe('Edited by admin');
+    expect(merged.templates.payment_verified.en).toBe(DEFAULT_TEMPLATES.payment_verified.en);
+    expect(merged.templates.packed.en).toContain('{trackingUrl}');
   });
   it('every default template exists in all three languages with the same variables', () => {
     const vars = (s: string) => [...s.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();

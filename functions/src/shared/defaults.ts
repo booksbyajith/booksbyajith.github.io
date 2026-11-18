@@ -1,5 +1,5 @@
-import { DEFAULT_TEMPLATES } from './templates.js';
-import type { PrivateConfig, PublicConfig } from './types.js';
+import { DEFAULT_TEMPLATES, LEGACY_TEMPLATES } from './templates.js';
+import type { L10n, PrivateConfig, PublicConfig } from './types.js';
 
 /** Empty business defaults. Real values are entered in the admin Settings screen. */
 export const DEFAULT_PUBLIC_CONFIG: PublicConfig = {
@@ -67,7 +67,7 @@ export function mergePrivateConfig(doc: Partial<PrivateConfig> | undefined): Pri
   return {
     ...d,
     ...c,
-    templates: { ...d.templates, ...c.templates },
+    templates: mergeTemplates(c.templates),
     retention: { ...d.retention, ...c.retention },
     notifications: {
       ...d.notifications,
@@ -86,4 +86,24 @@ export function mergePrivateConfig(doc: Partial<PrivateConfig> | undefined): Pri
       },
     },
   };
+}
+
+/**
+ * Saved templates win, except a saved text still equal to an earlier default (never edited):
+ * that one gets today's default, so improvements such as the tracking link reach it too.
+ */
+function mergeTemplates(saved: Partial<PrivateConfig['templates']> | undefined): PrivateConfig['templates'] {
+  const out = { ...DEFAULT_TEMPLATES };
+  for (const [key, l10n] of Object.entries(saved ?? {}) as [keyof PrivateConfig['templates'], L10n][]) {
+    if (!l10n) continue;
+    const legacy = LEGACY_TEMPLATES[key];
+    const merged: L10n = { ...DEFAULT_TEMPLATES[key] };
+    for (const [lang, text] of Object.entries(l10n) as [keyof L10n, string | undefined][]) {
+      if (text === undefined) continue;
+      const upgraded = legacy && legacy[lang] === text ? DEFAULT_TEMPLATES[key][lang] : undefined;
+      merged[lang] = upgraded ?? text;
+    }
+    out[key] = merged;
+  }
+  return out;
 }
