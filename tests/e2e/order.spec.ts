@@ -197,6 +197,16 @@ test('the order number shown as the bank reference is the one the order gets', a
 test('the total can be copied without commas for the bank app', async ({ page, context, browserName }) => {
   test.skip(browserName !== 'chromium');
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  // Record what this page copies: the machine's clipboard is shared with tests running in
+  // parallel, which can overwrite it between the click and the read.
+  await page.addInitScript(() => {
+    const w = window as unknown as { __copied?: string };
+    const write = navigator.clipboard.writeText.bind(navigator.clipboard);
+    navigator.clipboard.writeText = (text: string) => {
+      w.__copied = text;
+      return write(text).catch(() => undefined);
+    };
+  });
   await page.goto('order/?book=portuguese-era-1505-1594');
   await ready(page);
   await page.click('[data-next-step]');
@@ -205,7 +215,10 @@ test('the total can be copied without commas for the bank app', async ({ page, c
   const amount = page.locator('[data-bank-field="order.payment.amount"]');
   await expect(amount).toContainText(/Rs\. [\d,]+/);
   await amount.locator('xpath=ancestor::dd').locator('button').click();
-  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as { __copied?: string }).__copied ?? ''))
+    .not.toBe('');
+  const copied = await page.evaluate(() => (window as unknown as { __copied?: string }).__copied ?? '');
   expect(copied).toMatch(/^\d+$/);
   expect(Number(copied)).toBeGreaterThan(0);
 });
