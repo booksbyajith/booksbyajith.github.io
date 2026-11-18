@@ -281,6 +281,29 @@ export function Settings() {
           value={pub.contact.email ?? ''}
           onInput={(v) => setP('contact', { ...pub.contact, email: v })}
         />
+        <p class="mt-4 font-semibold">{t('admin.settings.pickup')}</p>
+        <p class="field-hint mb-2">{t('admin.settings.pickupHint')}</p>
+        <TextIn
+          label={t('admin.settings.pickupName')}
+          value={pub.contact.pickupName ?? ''}
+          onInput={(v) => setP('contact', { ...pub.contact, pickupName: v })}
+        />
+        <TextIn
+          label={t('admin.settings.pickupAddress')}
+          value={pub.contact.pickupAddress ?? ''}
+          onInput={(v) => setP('contact', { ...pub.contact, pickupAddress: v })}
+        />
+        <TextIn
+          label={t('admin.settings.pickupMapUrl')}
+          type="url"
+          value={pub.contact.pickupMapUrl ?? ''}
+          onInput={(v) => setP('contact', { ...pub.contact, pickupMapUrl: v })}
+        />
+        <NumIn
+          label={t('admin.settings.pickupPrice')}
+          value={pub.contact.pickupPriceLKR ?? 0}
+          onInput={(v) => setP('contact', { ...pub.contact, pickupPriceLKR: v })}
+        />
         <SaveBar state={st('contact')} onSave={() => save('contact', { public: pick('contact') })} />
       </Section>
 

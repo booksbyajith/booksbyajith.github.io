@@ -22,7 +22,11 @@
         "orderPhone": "94770000000",
         "facebookPageUrl": "https://www.facebook.com/example",
         "tiktokUrl": "https://www.tiktok.com/@example",
-        "email": "books@example.com"
+        "email": "books@example.com",
+        "pickupName": "Sample Bookshop",
+        "pickupAddress": "1 Example Road, Colombo",
+        "pickupMapUrl": "https://maps.example.com/place",
+        "pickupPriceLKR": 4000
       },
       "social": {
         "reels": [

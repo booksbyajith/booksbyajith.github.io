@@ -223,6 +223,10 @@ export const publicConfigSchema = z.strictObject({
     facebookPageUrl: optHttpsOrEmpty,
     tiktokUrl: optHttpsOrEmpty.optional(),
     email: z.union([z.literal(''), emailSchema]).optional(),
+    pickupName: z.string().trim().max(120).optional(),
+    pickupAddress: z.string().trim().max(200).optional(),
+    pickupMapUrl: optHttpsOrEmpty.optional(),
+    pickupPriceLKR: int(0, 1_000_000).optional(),
   }),
   social: z.strictObject({
     reels: z.array(socialLink).max(6),

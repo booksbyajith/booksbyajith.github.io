@@ -22,7 +22,8 @@ test('the order page shows how to order, with the settings bank details', async 
   const box = page.locator('[data-testid="how-to-order"]');
   await expect(box.locator('[data-config-text="bank-account-number"]')).toHaveText('000000000000');
   await expect(box.locator('[data-config-text="whatsapp-number"]')).toHaveText('+94770000000');
-  await expect(box.locator('a')).toHaveCount(0);
+  // Only link: the in-person purchase place on Google Maps.
+  await expect(box.locator('a')).toHaveCount(1);
 });
 
 test('footer and contact page link to Facebook and TikTok with icons', async ({ page }) => {
@@ -50,4 +51,19 @@ test('contact page shows the contact email from the settings', async ({ page }) 
   await expect(email).toContainText('books@example.com');
   await expect(email.locator('svg[data-icon="email"]')).toHaveCount(1);
   await expect(page.locator('main a[data-config="tiktok"] svg[data-icon="tiktok"]')).toHaveCount(1);
+});
+
+test('in-person purchase is shown from the settings on the order page and the news post', async ({
+  page,
+}) => {
+  await resetAll();
+  await page.goto('order/');
+  const note = page.locator('[data-testid="howto-pickup"]');
+  await expect(note).toBeVisible();
+  await expect(note).toContainText('Sample Bookshop');
+  await expect(note).toContainText('1 Example Road, Colombo');
+  await expect(note).toContainText('4,000');
+  await expect(note.locator('a')).toHaveAttribute('href', 'https://maps.example.com/place');
+  await page.goto('en/news/how-to-order/');
+  await expect(page.locator('article [data-pickup]')).toContainText('Rs. 4,000 at Sample Bookshop');
 });

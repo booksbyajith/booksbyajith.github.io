@@ -70,6 +70,11 @@ export interface PublicConfig {
     facebookPageUrl: string;
     tiktokUrl?: string;
     email?: string;
+    /** Where the book can be bought in person (shown only when the name and price are set). */
+    pickupName?: string;
+    pickupAddress?: string;
+    pickupMapUrl?: string;
+    pickupPriceLKR?: number;
   };
   social: {
     reels: SocialLink[];

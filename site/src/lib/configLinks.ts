@@ -5,7 +5,7 @@ import { fetchPublicConfig } from './publicData';
 export function initConfigLinks(): void {
   const els = document.querySelectorAll<HTMLElement>('[data-config]');
   const texts = document.querySelectorAll<HTMLElement>('[data-config-text]');
-  if (!els.length && !texts.length) return;
+  if (!els.length && !texts.length && !document.querySelector('[data-pickup]')) return;
   const run = async () => {
     const cfg = await fetchPublicConfig();
     if (!cfg) return;
@@ -19,6 +19,18 @@ export function initConfigLinks(): void {
       'bank-account-number': cfg.bank.accountNumber,
       'whatsapp-number': wa ? `+${wa}` : '',
     };
+    // In-person purchase: shown only once a place and a price are set.
+    const c = cfg.contact;
+    if (c.pickupName && c.pickupPriceLKR) {
+      values['pickup-name'] = c.pickupName;
+      values['pickup-address'] = c.pickupAddress ?? '';
+      values['pickup-price'] = c.pickupPriceLKR.toLocaleString('en-US');
+      for (const el of document.querySelectorAll<HTMLElement>('[data-pickup]')) el.hidden = false;
+      for (const a of document.querySelectorAll<HTMLAnchorElement>('a[data-pickup-map]')) {
+        if (c.pickupMapUrl) a.href = c.pickupMapUrl;
+        else a.removeAttribute('href');
+      }
+    }
     for (const el of texts) {
       const v = values[el.dataset.configText ?? ''];
       if (v) el.textContent = v;

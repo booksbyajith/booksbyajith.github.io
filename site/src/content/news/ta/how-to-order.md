@@ -7,6 +7,9 @@ translationKey: how-to-order
 ---
 
 1. **இலங்கைக்குள்:** புத்தகத்தின் விலையில் தபால் கட்டணம் உள்ளடங்கியிருப்பதால், நீங்கள் ஆர்டர் செய்யும் புத்தகத்தின் பெறுமதிக்குரிய தொகையைக் கீழே உள்ள கணக்கில் வைப்பிலிடவும். [இந்தப் பக்கத்தைப்](../../order/) பயன்படுத்தி டெபிட் அட்டை மூலமும் வைப்புச் செய்யலாம்.
+
+   <p data-pickup hidden><strong><a data-pickup-map target="_blank" rel="noopener"><span data-config-text="pickup-name"></span></a> (<span data-config-text="pickup-address"></span>) இல் நூலை ரூ. <span data-config-text="pickup-price"></span> க்கு நேரடியாகவும் வாங்கலாம்.</strong></p>
+
 2. **கணக்கு விவரங்கள்:**
    - கணக்கின் பெயர்: <span data-config-text="bank-account-name">…</span>
    - வங்கி: <span data-config-text="bank-name">…</span>

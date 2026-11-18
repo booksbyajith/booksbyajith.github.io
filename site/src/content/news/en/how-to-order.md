@@ -7,6 +7,9 @@ translationKey: how-to-order
 ---
 
 1. **Within Sri Lanka:** since the postal fee is included in the price of the book, please deposit the amount corresponding to the value of the book you are ordering into the account below. You can also make a debit card deposit using [this page](../../order/).
+
+   <p data-pickup hidden><strong>You can also buy the book in person for Rs. <span data-config-text="pickup-price"></span> at <a data-pickup-map target="_blank" rel="noopener"><span data-config-text="pickup-name"></span></a> (<span data-config-text="pickup-address"></span>).</strong></p>
+
 2. **Account details:**
    - Account name: <span data-config-text="bank-account-name">…</span>
    - Bank: <span data-config-text="bank-name">…</span>

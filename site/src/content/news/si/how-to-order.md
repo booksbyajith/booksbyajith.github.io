@@ -7,6 +7,9 @@ translationKey: how-to-order
 ---
 
 1. ලංකාව තුළ පොතෙහි මිලට තැපැල් ගාස්තුව ඇතුළත් නිසා, ඔබ ඇණවුම් කරන පොතෙහි වටිනාකමට සරිලන මුදල පහත ගිණුමෙහි තැන්පත් කරන්න. මේ සඳහා ඔබට [මේ පිටුව](../../order/) භාවිතා කර ඩෙබිට් කාඩ් තැන්පතුවක්ද කළ හැක.
+
+   <p data-pickup hidden><strong><a data-pickup-map target="_blank" rel="noopener"><span data-config-text="pickup-name"></span></a> (<span data-config-text="pickup-address"></span>) වෙතින් පොත රු. <span data-config-text="pickup-price"></span> කට සෘජුවම මිලදී ගත හැක.</strong></p>
+
 2. ගිණුම:
    - ගිණුමේ නම: <span data-config-text="bank-account-name">…</span>
    - බැංකුව: <span data-config-text="bank-name">…</span>
