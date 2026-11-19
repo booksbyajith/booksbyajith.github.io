@@ -99,6 +99,11 @@ test('a tracking link with the private key opens on any device without the phone
   // No form or "enter your details" line when opened from the link.
   await expect(other.locator('#t-last4')).toHaveCount(0);
   await expect(other.locator('.track-intro')).toBeHidden();
+  // Switching language keeps the same order open.
+  await other.click('a[data-lang-toggle="en"]');
+  await expect(other).toHaveURL(new RegExp(`/en/track/#${orderId}/${key}$`));
+  await expect(other.locator('[data-testid="track-status"]')).toBeVisible();
+  await expect(other.locator('#t-last4')).toHaveCount(0);
   // ...but another order can still be checked.
   await other.click('[data-testid="track-another"]');
   await expect(other.locator('#t-last4')).toBeVisible();

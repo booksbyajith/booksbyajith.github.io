@@ -32,6 +32,21 @@ function pixel() {
   });
 }
 
+/**
+ * Switching language keeps the rest of the address: "#order/key" on the tracking page,
+ * "#order" on the success page, "?book=" on the order form.
+ */
+function keepAddressOnLanguageSwitch(): void {
+  document.addEventListener('click', (e) => {
+    const a = (e.target as Element | null)?.closest<HTMLAnchorElement>('a[data-lang-toggle]');
+    if (!a || (!location.hash && !location.search)) return;
+    const url = new URL(a.href, location.href);
+    if (!url.search && location.search) url.search = location.search;
+    if (!url.hash && location.hash) url.hash = location.hash;
+    a.href = url.toString();
+  });
+}
+
 export function initClient(): void {
   // Start the intro animations once everything on the first screen has loaded.
   const ready = () => requestAnimationFrame(() => document.documentElement.classList.add('is-ready'));
@@ -39,6 +54,7 @@ export function initClient(): void {
   else window.addEventListener('load', ready, { once: true });
 
   initConfigLinks();
+  keepAddressOnLanguageSwitch();
   trackPageView();
   pixel();
   if ('serviceWorker' in navigator) {

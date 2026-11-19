@@ -349,6 +349,7 @@ export const en: Dict = {
   'status.desc.pending_verification': 'We have your order and bank slip.',
   'status.desc.acknowledged': 'We are checking your bank transfer.',
   'status.desc.payment_verified': 'Your payment is confirmed and the book is being prepared.',
+  'status.desc.packed': 'Your order is packed and will be posted shortly.',
   'status.desc.dispatched': 'Your book is on its way.',
   'status.desc.delivered': 'Your book has been delivered.',
   'status.desc.rejected': 'We could not verify the payment. Please contact us on WhatsApp.',

@@ -1,9 +1,16 @@
+import { ORDER_STATUSES } from '@shared/types';
 import { describe, expect, it } from 'vitest';
 import { en } from './en';
 import { si } from './si';
 import { ta } from './ta';
 
 describe('i18n dictionaries', () => {
+  it('name and describe every order status', () => {
+    for (const s of ORDER_STATUSES) {
+      expect(si, s).toHaveProperty([`status.${s}`]);
+      expect(si, s).toHaveProperty([`status.desc.${s}`]);
+    }
+  });
   it('have identical keys', () => {
     expect(Object.keys(en).sort()).toEqual(Object.keys(si).sort());
     expect(Object.keys(ta).sort()).toEqual(Object.keys(si).sort());

@@ -343,6 +343,7 @@ export const si = {
   'status.desc.pending_verification': 'ඔබගේ ඇණවුම සහ බැංකු රිසිට්පත අපට ලැබී ඇත.',
   'status.desc.acknowledged': 'අපි ඔබගේ බැංකු මාරුව පරීක්ෂා කරමින් සිටිමු.',
   'status.desc.payment_verified': 'ඔබගේ ගෙවීම තහවුරුයි, පොත සූදානම් කරමින් පවතී.',
+  'status.desc.packed': 'ඔබගේ ඇණවුම ඇසුරුම් කර ඇති අතර ඉක්මනින් තැපැල් කරනු ලැබේ.',
   'status.desc.dispatched': 'ඔබගේ පොත එමින් පවතී.',
   'status.desc.delivered': 'ඔබගේ පොත බාර දී ඇත.',
   'status.desc.rejected': 'ගෙවීම තහවුරු කළ නොහැකි විය. කරුණාකර WhatsApp හරහා අප අමතන්න.',
