@@ -78,6 +78,8 @@ test('admin acknowledges, verifies and dispatches with WhatsApp links and emails
   expect(msg).toContain('TRK777');
   expect(msg).toMatch(new RegExp(`http://127.0.0.1:4321/booksbyajith/track/#${orderId}/[0-9a-f]{32}`));
   expect(msg).toContain('https://www.facebook.com/example');
+  // Thanks the customer again in the last message.
+  expect(msg).toContain(`${title} ඇණවුම් කිරීම ගැන ඔබට නැවතත් හෘදයාංගම ස්තුතිය! 🙏`);
   await expect(admin.locator('[data-testid="audit-log"] li')).toHaveCount(5); // created + 3 status + slip view
 
   // Emails in the dev outbox

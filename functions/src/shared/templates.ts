@@ -18,9 +18,9 @@ export const DEFAULT_TEMPLATES: Record<TemplateKey, L10n> = {
     ta: 'உங்கள் ஆர்டர் {orderId} ({bookTitles}) பொதி செய்யப்பட்டது, விரைவில் தபாலில் அனுப்பப்படும் 📦. உங்கள் ஆர்டரை இங்கே கண்காணிக்கவும்: {trackingUrl}',
   },
   dispatched: {
-    en: 'Good news! Your order {orderId} ({bookTitles}) has been posted via {courier}, tracking number {trackingNo}. You should receive it within 3 days. Track it here: {trackingUrl}. Follow our Facebook page for history stories: {facebookUrl}',
-    si: 'සුබ ආරංචියක්! ඔබගේ ඇණවුම {orderId} ({bookTitles}) {courier} මගින් තැපැල් කර ඇත. ලුහුබැඳීමේ අංකය {trackingNo}. දින 3ක් ඇතුළත ඔබට ලැබෙනු ඇත. මෙතැනින් පරීක්ෂා කරන්න: {trackingUrl}. ඉතිහාස කතා සඳහා අපගේ Facebook පිටුව අනුගමනය කරන්න: {facebookUrl}',
-    ta: 'நல்ல செய்தி! உங்கள் ஆர்டர் {orderId} ({bookTitles}) {courier} மூலம் அனுப்பப்பட்டது, கண்காணிப்பு எண் {trackingNo}. 3 நாட்களுக்குள் உங்களுக்குக் கிடைக்கும். இங்கே கண்காணிக்கவும்: {trackingUrl}. வரலாற்றுக் கதைகளுக்கு எங்கள் Facebook பக்கத்தைப் பின்தொடருங்கள்: {facebookUrl}',
+    en: 'Good news! Your order {orderId} ({bookTitles}) has been posted via {courier}, tracking number {trackingNo}. You should receive it within 3 days. Track it here: {trackingUrl}. Thank you again for ordering {bookTitles}! 🙏 Follow our Facebook page for history stories: {facebookUrl}',
+    si: 'සුබ ආරංචියක්! ඔබගේ ඇණවුම {orderId} ({bookTitles}) {courier} මගින් තැපැල් කර ඇත. ලුහුබැඳීමේ අංකය {trackingNo}. දින 3ක් ඇතුළත ඔබට ලැබෙනු ඇත. මෙතැනින් පරීක්ෂා කරන්න: {trackingUrl}. {bookTitles} ඇණවුම් කිරීම ගැන ඔබට නැවතත් හෘදයාංගම ස්තුතිය! 🙏 ඉතිහාස කතා සඳහා අපගේ Facebook පිටුව අනුගමනය කරන්න: {facebookUrl}',
+    ta: 'நல்ல செய்தி! உங்கள் ஆர்டர் {orderId} ({bookTitles}) {courier} மூலம் அனுப்பப்பட்டது, கண்காணிப்பு எண் {trackingNo}. 3 நாட்களுக்குள் உங்களுக்குக் கிடைக்கும். இங்கே கண்காணிக்கவும்: {trackingUrl}. {bookTitles} ஆர்டர் செய்ததற்கு மீண்டும் மனமார்ந்த நன்றி! 🙏 வரலாற்றுக் கதைகளுக்கு எங்கள் Facebook பக்கத்தைப் பின்தொடருங்கள்: {facebookUrl}',
   },
   rejected: {
     en: 'We could not verify the payment for order {orderId}: {reason}. Please reply to this message so we can help.',
@@ -46,6 +46,11 @@ export const LEGACY_TEMPLATES: Partial<Record<TemplateKey, L10n>> = {
     en: 'Your payment for order {orderId} has been verified ✅. We are now preparing your book for dispatch.',
     si: 'ඇණවුම් අංක {orderId} සඳහා ඔබගේ ගෙවීම තහවුරු විය ✅. අපි දැන් ඔබගේ පොත යැවීමට සූදානම් කරමින් සිටිමු.',
     ta: 'ஆர்டர் {orderId} க்கான உங்கள் கட்டணம் சரிபார்க்கப்பட்டது ✅. உங்கள் புத்தகத்தை அனுப்புவதற்குத் தயார் செய்து வருகிறோம்.',
+  },
+  dispatched: {
+    en: 'Good news! Your order {orderId} ({bookTitles}) has been posted via {courier}, tracking number {trackingNo}. You should receive it within 3 days. Track it here: {trackingUrl}. Follow our Facebook page for history stories: {facebookUrl}',
+    si: 'සුබ ආරංචියක්! ඔබගේ ඇණවුම {orderId} ({bookTitles}) {courier} මගින් තැපැල් කර ඇත. ලුහුබැඳීමේ අංකය {trackingNo}. දින 3ක් ඇතුළත ඔබට ලැබෙනු ඇත. මෙතැනින් පරීක්ෂා කරන්න: {trackingUrl}. ඉතිහාස කතා සඳහා අපගේ Facebook පිටුව අනුගමනය කරන්න: {facebookUrl}',
+    ta: 'நல்ல செய்தி! உங்கள் ஆர்டர் {orderId} ({bookTitles}) {courier} மூலம் அனுப்பப்பட்டது, கண்காணிப்பு எண் {trackingNo}. 3 நாட்களுக்குள் உங்களுக்குக் கிடைக்கும். இங்கே கண்காணிக்கவும்: {trackingUrl}. வரலாற்றுக் கதைகளுக்கு எங்கள் Facebook பக்கத்தைப் பின்தொடருங்கள்: {facebookUrl}',
   },
 };
 
