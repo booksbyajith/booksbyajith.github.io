@@ -81,3 +81,24 @@ test('removing an order from this device asks first', async ({ page }) => {
   await page.click(`[data-my-remove="${orderId}"]`);
   await expect(page.locator(`[data-my-remove="${orderId}"]`)).toHaveCount(0);
 });
+
+test('a tracking link with the private key opens on any device without the phone digits', async ({
+  page,
+  browser,
+}) => {
+  const orderId = await placeOrder(page);
+  // The success page's link carries the key.
+  const link = (await page.locator(`a[href*="track/#${orderId}/"]`).first().getAttribute('href'))!;
+  const key = link.split(`#${orderId}/`)[1];
+  expect(key).toMatch(/^[0-9a-f]{32}$/);
+
+  const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL });
+  const other = await ctx.newPage();
+  await other.goto(`track/#${orderId}/${key}`);
+  await expect(other.locator('[data-testid="track-status"]')).toBeVisible();
+  // A wrong key does not open it.
+  await other.goto('about:blank');
+  await other.goto(`track/#${orderId}/${'0'.repeat(32)}`);
+  await expect(other.locator('[data-testid="track-status"]')).toHaveCount(0);
+  await ctx.close();
+});

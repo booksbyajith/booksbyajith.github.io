@@ -44,9 +44,10 @@ export default function TrackApp({ lang, dict }: Props) {
   const [mine, setMine] = useState<MyOrder[]>([]);
   const hydrated = useHydrated();
 
-  const lookup = async (id: string, digits: string) => {
+  /** Look up by phone digits, or by the private key from a tracking link. */
+  const lookup = async (id: string, digits: string, key?: string) => {
     const oid = id.trim().toUpperCase();
-    if (!ORDER_ID_REGEX.test(oid) || !/^\d{4}$/.test(digits.trim())) {
+    if (!ORDER_ID_REGEX.test(oid) || (!key && !/^\d{4}$/.test(digits.trim()))) {
       setError('track.notFound');
       return;
     }
@@ -54,7 +55,12 @@ export default function TrackApp({ lang, dict }: Props) {
     setError(null);
     setResult(null);
     try {
-      setResult(await call<unknown, TrackResult>('trackOrder', { orderId: oid, phoneLast4: digits.trim() }));
+      setResult(
+        await call<unknown, TrackResult>(
+          'trackOrder',
+          key ? { orderId: oid, key } : { orderId: oid, phoneLast4: digits.trim() },
+        ),
+      );
     } catch (e) {
       const ce = callError(e);
       setError(
@@ -68,14 +74,17 @@ export default function TrackApp({ lang, dict }: Props) {
   useEffect(() => {
     const list = myOrders();
     setMine(list);
-    const id = decodeURIComponent(location.hash.slice(1)).toUpperCase();
+    // "#AJ-2611-8FV7" or, from a link we sent, "#AJ-2611-8FV7/<private key>".
+    const [rawId, rawKey] = decodeURIComponent(location.hash.slice(1)).split('/');
+    const id = (rawId ?? '').toUpperCase();
+    const key = /^[0-9a-f]{32}$/.test(rawKey ?? '') ? rawKey : undefined;
     if (ORDER_ID_REGEX.test(id)) {
       setOrderId(id);
       const known = list.find((o) => o.orderId === id);
-      if (known) {
-        setLast4(known.phoneLast4);
-        void lookup(id, known.phoneLast4);
-      }
+      if (known) setLast4(known.phoneLast4);
+      if (key) void lookup(id, '', key);
+      else if (known?.trackKey) void lookup(id, '', known.trackKey);
+      else if (known) void lookup(id, known.phoneLast4);
     }
   }, []);
 
@@ -83,7 +92,7 @@ export default function TrackApp({ lang, dict }: Props) {
     setOrderId(o.orderId);
     setLast4(o.phoneLast4);
     history.replaceState(null, '', `#${o.orderId}`);
-    void lookup(o.orderId, o.phoneLast4);
+    void lookup(o.orderId, o.phoneLast4, o.trackKey);
   };
 
   const reached = (s: OrderStatus) => result?.timeline.find((x) => x.status === s);

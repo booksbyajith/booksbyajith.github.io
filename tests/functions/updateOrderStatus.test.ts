@@ -28,14 +28,14 @@ describe('updateOrderStatus', () => {
       `Test Customer, ලංකාවේ පෘතුගීසි සිටි යුගය (1505-1594) ඇණවුම් කිරීම ගැන ඔබට ස්තුතියි! 🙏 ඔබගේ ඇණවුම් අංකය ${orderId}. අපි ඔබගේ බැංකු තැන්පතුව ඉක්මනින් තහවුරු කර පොත සූදානම් කිරීම අරඹන්නෙමු. ඔබගේ ඇණවුම මෙතැනින් පරීක්ෂා කරන්න: `,
     );
     // The order's own tracking link.
-    expect(si.endsWith(`/track/#${orderId}`)).toBe(true);
+    expect(si).toMatch(new RegExp(`/track/#${orderId}/[0-9a-f]{32}$`));
     expect((await move('payment_verified')).result.status).toBe('payment_verified');
     const d = await move('dispatched', { courier: 'Demo Courier', trackingNo: 'TRK123' });
     expect(d.error).toBeUndefined();
     const msg = decode(d.result.waUrl);
     expect(msg).toContain('Demo Courier');
     expect(msg).toContain('TRK123');
-    expect(msg).toContain(`http://127.0.0.1:4321/booksbyajith/track/#${orderId}`);
+    expect(msg).toMatch(new RegExp(`http://127.0.0.1:4321/booksbyajith/track/#${orderId}/[0-9a-f]{32}`));
     expect(msg).toContain('https://www.facebook.com/example');
     const del = await move('delivered');
     expect(del.result.waUrl).toBeNull();
@@ -81,7 +81,7 @@ describe('updateOrderStatus', () => {
     expect(text).toContain(
       `Thank you for ordering The Portuguese in Sri Lanka (1505–1594), English Reader! 🙏 Your order number is ${en}. We will verify your bank transfer shortly and start preparing your book. Track your order here: `,
     );
-    expect(text.endsWith(`/en/track/#${en}`)).toBe(true);
+    expect(text).toMatch(new RegExp(`/en/track/#${en}/[0-9a-f]{32}$`));
   });
 
   it('rejects every invalid transition', async () => {

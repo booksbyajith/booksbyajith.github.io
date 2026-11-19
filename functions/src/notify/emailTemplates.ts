@@ -111,7 +111,7 @@ function customerEmail(
 ): EmailContent {
   const lang = order.lang;
   const t = T[lang];
-  const trackUrl = buildTrackUrl(siteUrl, lang, order.orderId);
+  const trackUrl = buildTrackUrl(siteUrl, lang, order.orderId, order.trackKey);
   const subject = `${t[subjectKey]} — ${order.orderId}`;
   const rows: [string, string][] = [
     [t.orderId, `<strong>${esc(order.orderId)}</strong>`],

@@ -22,7 +22,16 @@ describe('createOrder', () => {
     expect(out.phoneMasked).toBe('••• ••• 0001');
     expect(out.totalMismatch).toBe(false);
     expect(Object.keys(out).sort()).toEqual(
-      ['createdAt', 'items', 'orderId', 'phoneMasked', 'status', 'totalMismatch', 'totals'].sort(),
+      [
+        'createdAt',
+        'items',
+        'orderId',
+        'phoneMasked',
+        'status',
+        'totalMismatch',
+        'totals',
+        'trackKey',
+      ].sort(),
     );
 
     const order = (await db.doc(`orders/${out.orderId}`).get()).data()!;

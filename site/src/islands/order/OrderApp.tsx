@@ -62,6 +62,7 @@ interface CreateOrderResult {
   totals: Totals;
   phoneMasked: string;
   totalMismatch: boolean;
+  trackKey?: string;
 }
 
 const STEPS: I18nKey[] = [
@@ -462,6 +463,7 @@ export default function OrderApp({
         titles: res.items.map((i) => tl(i.title, lang)),
         totalLKR: res.totals.grandTotalLKR,
         phoneLast4: fields.mobile.replace(/\D/g, '').slice(-4),
+        trackKey: res.trackKey,
         lang,
       });
       clearDraftJson();

@@ -4,7 +4,7 @@ import { ORDER_ID_REGEX } from '@shared/constants';
 import { formatLKR } from '@shared/pricing';
 import { buildWaUrl } from '@shared/templates';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { getReceipt, type ReceiptData } from '../../lib/myOrders';
+import { getReceipt, myOrders, type ReceiptData } from '../../lib/myOrders';
 import { fetchPublicConfig } from '../../lib/publicData';
 import {
   downloadBlob,
@@ -21,6 +21,12 @@ interface Props {
   dict: MiniDict;
   trackHref: string;
   trackAbsUrl: string;
+}
+
+/** "AJ-…/key" when this device has the order's private key, so the link opens directly. */
+function trackFrag(id: string): string {
+  const key = myOrders().find((o) => o.orderId === id)?.trackKey;
+  return key ? `${id}/${key}` : id;
 }
 
 export default function SuccessApp({ lang, dict, trackHref, trackAbsUrl }: Props) {
@@ -41,7 +47,11 @@ export default function SuccessApp({ lang, dict, trackHref, trackAbsUrl }: Props
     setOrderId(id);
     setReceipt(getReceipt(id));
     void import('qrcode').then((QR) =>
-      QR.toDataURL(`${trackAbsUrl}#${id}`, { margin: 1, width: 280, errorCorrectionLevel: 'M' }).then(setQr),
+      QR.toDataURL(`${trackAbsUrl}#${trackFrag(id)}`, {
+        margin: 1,
+        width: 280,
+        errorCorrectionLevel: 'M',
+      }).then(setQr),
     );
     void fetchPublicConfig().then((c) => {
       if (c?.contact.whatsappNumber)
@@ -161,7 +171,7 @@ export default function SuccessApp({ lang, dict, trackHref, trackAbsUrl }: Props
             {t('success.sms')}
           </a>
         )}
-        <a href={`${trackHref}#${orderId}`} class="btn-secondary">
+        <a href={`${trackHref}#${trackFrag(orderId ?? '')}`} class="btn-secondary">
           {t('success.track')}
         </a>
       </div>
@@ -173,7 +183,7 @@ export default function SuccessApp({ lang, dict, trackHref, trackAbsUrl }: Props
             lang={lang}
             r={receipt}
             qr={qr}
-            qrUrl={`${trackAbsUrl}#${orderId}`}
+            qrUrl={`${trackAbsUrl}#${trackFrag(orderId ?? '')}`}
             t={t}
             siteName={t('site.name')}
           />

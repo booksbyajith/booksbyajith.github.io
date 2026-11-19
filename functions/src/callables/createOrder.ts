@@ -14,6 +14,7 @@ import { isUsableRequestedId, paymentRef } from '../shared/orderRef.js';
 import { enforceRateLimit } from '../lib/rateLimit.js';
 import { buildSearchTokens } from '../lib/search.js';
 import { decodeSlip } from '../lib/slip.js';
+import { trackKeyFor } from '../lib/trackKey.js';
 
 class IdCollision extends Error {}
 
@@ -25,6 +26,7 @@ export interface CreateOrderResult {
   totals: OrderDoc['totals'];
   phoneMasked: string;
   totalMismatch: boolean;
+  trackKey: string;
 }
 
 export async function handleCreateOrder(request: CallableRequest<unknown>): Promise<CreateOrderResult> {
@@ -179,6 +181,8 @@ export async function handleCreateOrder(request: CallableRequest<unknown>): Prom
         totals: result.totals,
         phoneMasked: maskPhone(result.customer.mobile),
         totalMismatch: result.totalMismatch,
+        /** For the success page's tracking link. */
+        trackKey: trackKeyFor(orderId),
       };
     } catch (err) {
       await file.delete({ ignoreNotFound: true }).catch(() => undefined);

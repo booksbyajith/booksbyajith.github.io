@@ -38,6 +38,13 @@ export function OrderDetail({ orderId }: { orderId: string }) {
   const [err, setErr] = useState<string | null>(null);
   const [waUrl, setWaUrl] = useState<string | null>(null);
   const [note, setNote] = useState('');
+  const [trackKey, setTrackKey] = useState<string | null>(null);
+  useEffect(() => {
+    // The private tracking-link key for this order (WhatsApp messages open the order directly).
+    void call<{ orderId: string }, { key: string }>('getTrackKey', { orderId })
+      .then((r) => setTrackKey(r.key))
+      .catch(() => setTrackKey(null));
+  }, [orderId]);
   const [addrEdit, setAddrEdit] = useState<Record<string, string> | null>(null);
   const [addrErr, setAddrErr] = useState<string | null>(null);
   const [addrBusy, setAddrBusy] = useState(false);
@@ -83,7 +90,7 @@ export function OrderDetail({ orderId }: { orderId: string }) {
       total: formatLKR(order.totals.grandTotalLKR),
       courier: order.dispatch?.courier ?? '',
       trackingNo: order.dispatch?.trackingNo ?? '',
-      trackingUrl: buildTrackUrl(siteUrl, order.lang, order.orderId),
+      trackingUrl: buildTrackUrl(siteUrl, order.lang, order.orderId, trackKey),
       facebookUrl: pub?.contact.facebookPageUrl ?? '',
       reason: order.rejection?.reason ?? '',
     });

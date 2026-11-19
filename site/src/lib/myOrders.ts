@@ -12,6 +12,8 @@ export interface MyOrder {
   titles: string[];
   totalLKR: number;
   phoneLast4: string;
+  /** Private key from the order's tracking link (opens it without the phone digits). */
+  trackKey?: string;
   lang: Lang;
 }
 

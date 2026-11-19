@@ -6,6 +6,7 @@ import { Timestamp, db } from '../lib/admin.js';
 import { fail } from '../lib/errors.js';
 import { clientIp, parse, requireAppCheck } from '../lib/guard.js';
 import { enforceRateLimit, hit, peek } from '../lib/rateLimit.js';
+import { isTrackKey } from '../lib/trackKey.js';
 
 export interface TrackOrderResult {
   orderId: string;
@@ -31,7 +32,9 @@ export async function handleTrackOrder(request: CallableRequest<unknown>): Promi
 
   const snap = await db().collection('orders').doc(input.orderId).get();
   const order = snap.data() as OrderDoc | undefined;
-  if (!order || order.phoneLast4 !== input.phoneLast4) {
+  const ok =
+    !!order && (input.key ? isTrackKey(input.orderId, input.key) : order.phoneLast4 === input.phoneLast4);
+  if (!order || !ok) {
     const n = await hit({ ...failSpec, limit: FAIL_LIMIT });
     if (n >= FAIL_LIMIT + 1) fail('resource-exhausted', 'LOCKED');
     fail('not-found', 'NOT_FOUND');

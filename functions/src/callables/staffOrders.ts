@@ -1,5 +1,6 @@
 import { onCall, type CallableRequest } from 'firebase-functions/v2/https';
-import { ADMIN_CALLABLE, corsOrigins } from '../options.js';
+import { ADMIN_CALLABLE, HASH_SALT, corsOrigins } from '../options.js';
+import { trackKeyFor } from '../lib/trackKey.js';
 import { displayPhone, regionLine } from '../shared/districts.js';
 import type { Lang } from '../shared/constants.js';
 import type { L10n, OrderDoc } from '../shared/types.js';
@@ -19,6 +20,8 @@ export interface StaffOrder {
   items: { title: L10n; qty: number }[];
   signedCopy: boolean;
   dedicationNote: string | null;
+  /** Private key for the customer's tracking link (SMS). */
+  trackKey: string;
 }
 
 /**
@@ -51,10 +54,14 @@ export async function handleStaffOrders(
       items: o.items.map((i) => ({ title: i.title, qty: i.qty })),
       signedCopy: !!o.signedCopy,
       dedicationNote: o.dedicationNote ?? null,
+      trackKey: trackKeyFor(o.orderId),
     };
   });
   orders.sort((x, y) => x.verifiedAt - y.verifiedAt);
   return { orders };
 }
 
-export const staffOrders = onCall({ ...ADMIN_CALLABLE, cors: corsOrigins() }, handleStaffOrders);
+export const staffOrders = onCall(
+  { ...ADMIN_CALLABLE, cors: corsOrigins(), secrets: [HASH_SALT] },
+  handleStaffOrders,
+);

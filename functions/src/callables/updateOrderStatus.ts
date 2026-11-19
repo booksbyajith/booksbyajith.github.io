@@ -1,5 +1,5 @@
 import { onCall, type CallableRequest } from 'firebase-functions/v2/https';
-import { ADMIN_CALLABLE, corsOrigins } from '../options.js';
+import { ADMIN_CALLABLE, HASH_SALT, corsOrigins } from '../options.js';
 import { updateOrderStatusSchema } from '../shared/schemas.js';
 import { canTransition, isClosing, releasesStock, requiredFields, reservesStock } from '../shared/status.js';
 import { buildCourierTrackingUrl } from '../shared/templates.js';
@@ -106,4 +106,7 @@ export async function handleUpdateOrderStatus(
   };
 }
 
-export const updateOrderStatus = onCall({ ...ADMIN_CALLABLE, cors: corsOrigins() }, handleUpdateOrderStatus);
+export const updateOrderStatus = onCall(
+  { ...ADMIN_CALLABLE, cors: corsOrigins(), secrets: [HASH_SALT] },
+  handleUpdateOrderStatus,
+);

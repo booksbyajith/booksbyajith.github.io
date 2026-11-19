@@ -87,8 +87,9 @@ function trimSlash(s: string): string {
   return s.replace(/\/+$/, '');
 }
 
-export function buildTrackUrl(siteUrl: string, lang: Lang, orderId: string): string {
-  return `${trimSlash(siteUrl)}${lang === 'si' ? '' : `/${lang}`}/track/#${orderId}`;
+/** Tracking page link; with the order's private key it opens without the phone digits. */
+export function buildTrackUrl(siteUrl: string, lang: Lang, orderId: string, key?: string | null): string {
+  return `${trimSlash(siteUrl)}${lang === 'si' ? '' : `/${lang}`}/track/#${orderId}${key ? `/${key}` : ''}`;
 }
 
 export function buildOrderUrl(siteUrl: string, lang: Lang, slug?: string): string {

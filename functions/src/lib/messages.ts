@@ -3,6 +3,7 @@ import { formatLKR } from '../shared/pricing.js';
 import { bookTitles, buildTrackUrl, buildWaUrl, renderTemplate } from '../shared/templates.js';
 import type { OrderDoc, PrivateConfig, PublicConfig } from '../shared/types.js';
 import { templateKeyFor } from '../shared/status.js';
+import { trackKeyFor } from './trackKey.js';
 
 export function templateVars(order: OrderDoc, pub: PublicConfig): Record<string, string> {
   return {
@@ -12,7 +13,7 @@ export function templateVars(order: OrderDoc, pub: PublicConfig): Record<string,
     total: formatLKR(order.totals.grandTotalLKR),
     courier: order.dispatch?.courier ?? '',
     trackingNo: order.dispatch?.trackingNo ?? '',
-    trackingUrl: buildTrackUrl(SITE_URL.value(), order.lang, order.orderId),
+    trackingUrl: buildTrackUrl(SITE_URL.value(), order.lang, order.orderId, trackKeyFor(order.orderId)),
     facebookUrl: pub.contact.facebookPageUrl,
     reason: order.rejection?.reason ?? '',
   };

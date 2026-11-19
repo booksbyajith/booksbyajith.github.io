@@ -44,7 +44,7 @@ test('admin acknowledges, verifies and dispatches with WhatsApp links and emails
   expect(decodeWa(href)).toContain(
     `${CUSTOMER.name}, ${title} ඇණවුම් කිරීම ගැන ඔබට ස්තුතියි! 🙏 ඔබගේ ඇණවුම් අංකය ${orderId}. අපි ඔබගේ බැංකු තැන්පතුව ඉක්මනින් තහවුරු කර පොත සූදානම් කිරීම අරඹන්නෙමු. ඔබගේ ඇණවුම මෙතැනින් පරීක්ෂා කරන්න: `,
   );
-  expect(decodeWa(href).endsWith(`/track/#${orderId}`)).toBe(true);
+  expect(decodeWa(href)).toMatch(new RegExp(`/track/#${orderId}/[0-9a-f]{32}$`));
 
   // 2. Payment verified
   await Promise.all([context.waitForEvent('page'), admin.click('[data-action-to="payment_verified"]')]);
@@ -58,7 +58,7 @@ test('admin acknowledges, verifies and dispatches with WhatsApp links and emails
   expect(decodeWa(href)).toContain(
     `${CUSTOMER.name}, ඔබගේ ඇණවුමට අපගේ හෘදයාංගම ස්තුතිය! 🙏 ඇණවුම් අංක ${orderId} (${title}) සඳහා ඔබගේ ගෙවීම තහවුරු විය ✅.`,
   );
-  expect(decodeWa(href).endsWith(`/track/#${orderId}`)).toBe(true);
+  expect(decodeWa(href)).toMatch(new RegExp(`/track/#${orderId}/[0-9a-f]{32}$`));
 
   // 3. Dispatch (requires courier and tracking number)
   await admin.click('[data-action-to="dispatched"]');
@@ -76,7 +76,7 @@ test('admin acknowledges, verifies and dispatches with WhatsApp links and emails
   const msg = decodeWa(href);
   expect(msg).toContain(`${orderId} (${title}) Demo Courier මගින්`);
   expect(msg).toContain('TRK777');
-  expect(msg).toContain(`http://127.0.0.1:4321/booksbyajith/track/#${orderId}`);
+  expect(msg).toMatch(new RegExp(`http://127.0.0.1:4321/booksbyajith/track/#${orderId}/[0-9a-f]{32}`));
   expect(msg).toContain('https://www.facebook.com/example');
   await expect(admin.locator('[data-testid="audit-log"] li')).toHaveCount(5); // created + 3 status + slip view
 
@@ -131,7 +131,7 @@ test('packed orders get a WhatsApp button and the address can be corrected', asy
   await expect(wa).toBeVisible();
   const text = decodeWa((await wa.getAttribute('href'))!);
   expect(text).toContain('📦');
-  expect(text.endsWith(`/track/#${orderId}`)).toBe(true);
+  expect(text).toMatch(new RegExp(`/track/#${orderId}/[0-9a-f]{32}$`));
 
   // Correct the address (the town was written twice).
   await admin.click('[data-testid="address-edit"]');

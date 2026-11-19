@@ -25,6 +25,7 @@ interface StaffOrder {
   items: { title: { si: string; en: string; ta?: string }; qty: number }[];
   signedCopy: boolean;
   dedicationNote: string | null;
+  trackKey?: string;
 }
 
 interface Props {
@@ -206,7 +207,7 @@ export default function StaffApp({ dicts, siteUrl, senderName }: Props) {
   const smsHref = (o: StaffOrder) => {
     const text = ((dicts[o.lang]?.['staff.sms'] ?? dicts.en['staff.sms']) as string)
       .replace('{orderId}', o.orderId)
-      .replace('{url}', buildTrackUrl(siteUrl, o.lang, o.orderId));
+      .replace('{url}', buildTrackUrl(siteUrl, o.lang, o.orderId, o.trackKey));
     return `sms:${o.smsNumber}?&body=${encodeURIComponent(text)}`;
   };
 

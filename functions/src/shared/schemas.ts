@@ -153,13 +153,22 @@ export const createOrderSchema = z
   });
 export type CreateOrderInput = z.infer<typeof createOrderSchema>;
 
-export const trackOrderSchema = z.object({
-  orderId: orderIdSchema,
-  phoneLast4: z
-    .string()
-    .trim()
-    .regex(/^\d{4}$/),
-});
+export const trackOrderSchema = z
+  .object({
+    orderId: orderIdSchema,
+    phoneLast4: z
+      .string()
+      .trim()
+      .regex(/^\d{4}$/)
+      .optional(),
+    /** The private key from a tracking link, in place of the phone digits. */
+    key: z
+      .string()
+      .trim()
+      .regex(/^[0-9a-f]{32}$/)
+      .optional(),
+  })
+  .refine((d) => !!d.phoneLast4 || !!d.key, { message: 'phoneLast4' });
 export type TrackOrderInput = z.infer<typeof trackOrderSchema>;
 
 // ---------- admin callables ----------

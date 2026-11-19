@@ -9,6 +9,19 @@ beforeEach(async () => {
 });
 
 describe('trackOrder', () => {
+  it('opens with the private key from the link, without the phone digits', async () => {
+    const created = (await call('createOrder', await orderInput())).result;
+    expect(created.trackKey).toMatch(/^[0-9a-f]{32}$/);
+    const r = await call('trackOrder', { orderId: created.orderId, key: created.trackKey });
+    expect(r.error).toBeUndefined();
+    expect(r.result.orderId).toBe(created.orderId);
+    // Another order's key, or a made-up one, does not work.
+    expect((await call('trackOrder', { orderId, key: created.trackKey })).error?.status).toBe('NOT_FOUND');
+    expect((await call('trackOrder', { orderId, key: '0'.repeat(32) })).error?.status).toBe('NOT_FOUND');
+    // Neither digits nor key: rejected.
+    expect((await call('trackOrder', { orderId })).error?.status).toBe('INVALID_ARGUMENT');
+  });
+
   it('returns only status, timeline and dispatch info', async () => {
     const r = await call('trackOrder', { orderId, phoneLast4: '0001' });
     expect(r.error).toBeUndefined();

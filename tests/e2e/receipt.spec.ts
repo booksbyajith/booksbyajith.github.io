@@ -82,9 +82,10 @@ test('receipt JPG and PDF render Sinhala text correctly', async ({ page }) => {
   test.setTimeout(120_000);
   const orderId = await placeOrder(page);
   expect(await page.evaluate(() => document.fonts.check('16px "Noto Sans Sinhala"', 'ලංකාවේ'))).toBe(true);
+  // The receipt's QR code opens the order directly (it carries the private key).
   await expect(page.locator('[data-testid="receipt-qr"]')).toHaveAttribute(
     'data-qr-url',
-    `http://127.0.0.1:4321/booksbyajith/track/#${orderId}`,
+    new RegExp(`^http://127.0.0.1:4321/booksbyajith/track/#${orderId}/[0-9a-f]{32}$`),
   );
 
   // JPG
