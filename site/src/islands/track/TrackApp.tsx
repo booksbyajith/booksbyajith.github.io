@@ -41,6 +41,14 @@ export default function TrackApp({ lang, dict }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<I18nKey | null>(null);
   const [result, setResult] = useState<TrackResult | null>(null);
+  // Opened from a link we sent (it carries the order's private key): no form to fill in.
+  const [direct, setDirect] = useState(
+    () => typeof location !== 'undefined' && /\/[0-9a-f]{32}$/i.test(decodeURIComponent(location.hash)),
+  );
+  useEffect(() => {
+    if (direct) document.documentElement.dataset.trackDirect = 'true';
+    else delete document.documentElement.dataset.trackDirect;
+  }, [direct]);
   const [mine, setMine] = useState<MyOrder[]>([]);
   const hydrated = useHydrated();
 
@@ -63,6 +71,7 @@ export default function TrackApp({ lang, dict }: Props) {
       );
     } catch (e) {
       const ce = callError(e);
+      setDirect(false);
       setError(
         ce.code === 'LOCKED' || ce.status === 'resource-exhausted' ? 'track.locked' : 'track.notFound',
       );
@@ -101,53 +110,69 @@ export default function TrackApp({ lang, dict }: Props) {
   return (
     <div class="grid gap-8 lg:grid-cols-[1fr_320px]">
       <div>
-        <form
-          class="card p-4"
-          noValidate
-          method="post"
-          data-hydrated={hydrated ? 'true' : 'false'}
-          onSubmit={(e) => {
-            e.preventDefault();
-            void lookup(orderId, last4);
-          }}
-        >
-          <div class="grid gap-x-4 sm:grid-cols-2">
-            <Field id="t-order" label={t('track.orderId')}>
-              <input
-                id="t-order"
-                class="field-input font-mono uppercase"
-                value={orderId}
-                onInput={(e) => setOrderId((e.currentTarget as HTMLInputElement).value)}
-                placeholder="AJ-0000-XXXX"
-                autocomplete="off"
-                autocapitalize="characters"
-                maxLength={12}
-              />
-            </Field>
-            <Field id="t-last4" label={t('track.last4')}>
-              <input
-                id="t-last4"
-                class="field-input"
-                value={last4}
-                onInput={(e) =>
-                  setLast4((e.currentTarget as HTMLInputElement).value.replace(/\D/g, '').slice(0, 4))
-                }
-                inputMode="numeric"
-                maxLength={4}
-                autocomplete="off"
-                aria-describedby={describedBy('t-last4', undefined, null)}
-              />
-            </Field>
-          </div>
-          <button class="btn-primary" type="submit" disabled={!hydrated || busy} data-track-submit>
-            {busy ? '…' : t('track.submit')}
-          </button>
-          {error && (
-            <p class="field-error" role="alert" data-testid="track-error">
-              {t(error)}
-            </p>
-          )}
-        </form>
+        {direct ? (
+          <p>
+            <button
+              type="button"
+              class="btn-quiet min-h-9 px-2 py-0 text-sm"
+              data-testid="track-another"
+              onClick={() => {
+                setDirect(false);
+                history.replaceState(null, '', location.pathname);
+              }}
+            >
+              {t('track.another')}
+            </button>
+          </p>
+        ) : (
+          <form
+            class="card p-4"
+            noValidate
+            method="post"
+            data-hydrated={hydrated ? 'true' : 'false'}
+            onSubmit={(e) => {
+              e.preventDefault();
+              void lookup(orderId, last4);
+            }}
+          >
+            <div class="grid gap-x-4 sm:grid-cols-2">
+              <Field id="t-order" label={t('track.orderId')}>
+                <input
+                  id="t-order"
+                  class="field-input font-mono uppercase"
+                  value={orderId}
+                  onInput={(e) => setOrderId((e.currentTarget as HTMLInputElement).value)}
+                  placeholder="AJ-0000-XXXX"
+                  autocomplete="off"
+                  autocapitalize="characters"
+                  maxLength={12}
+                />
+              </Field>
+              <Field id="t-last4" label={t('track.last4')}>
+                <input
+                  id="t-last4"
+                  class="field-input"
+                  value={last4}
+                  onInput={(e) =>
+                    setLast4((e.currentTarget as HTMLInputElement).value.replace(/\D/g, '').slice(0, 4))
+                  }
+                  inputMode="numeric"
+                  maxLength={4}
+                  autocomplete="off"
+                  aria-describedby={describedBy('t-last4', undefined, null)}
+                />
+              </Field>
+            </div>
+            <button class="btn-primary" type="submit" disabled={!hydrated || busy} data-track-submit>
+              {busy ? '…' : t('track.submit')}
+            </button>
+            {error && (
+              <p class="field-error" role="alert" data-testid="track-error">
+                {t(error)}
+              </p>
+            )}
+          </form>
+        )}
 
         {result && (
           <section class="card mt-6 p-5" aria-labelledby="tl-h" data-testid="track-result">

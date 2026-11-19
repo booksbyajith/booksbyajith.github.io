@@ -96,9 +96,18 @@ test('a tracking link with the private key opens on any device without the phone
   const other = await ctx.newPage();
   await other.goto(`track/#${orderId}/${key}`);
   await expect(other.locator('[data-testid="track-status"]')).toBeVisible();
+  // No form or "enter your details" line when opened from the link.
+  await expect(other.locator('#t-last4')).toHaveCount(0);
+  await expect(other.locator('.track-intro')).toBeHidden();
+  // ...but another order can still be checked.
+  await other.click('[data-testid="track-another"]');
+  await expect(other.locator('#t-last4')).toBeVisible();
+  await expect(other.locator('.track-intro')).toBeVisible();
   // A wrong key does not open it.
   await other.goto('about:blank');
   await other.goto(`track/#${orderId}/${'0'.repeat(32)}`);
   await expect(other.locator('[data-testid="track-status"]')).toHaveCount(0);
+  // A bad link falls back to the form.
+  await expect(other.locator('#t-last4')).toBeVisible();
   await ctx.close();
 });

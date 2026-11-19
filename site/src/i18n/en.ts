@@ -324,6 +324,7 @@ export const en: Dict = {
   'track.orderId': 'Order number',
   'track.last4': 'Last 4 digits of mobile',
   'track.submit': 'Track',
+  'track.another': 'Check another order',
   'track.notFound':
     'We could not find an order with these details. Please check the order number and digits.',
   'track.locked': 'Too many attempts. Please try again in an hour or contact us on WhatsApp.',
