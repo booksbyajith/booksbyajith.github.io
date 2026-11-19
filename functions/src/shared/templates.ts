@@ -18,9 +18,9 @@ export const DEFAULT_TEMPLATES: Record<TemplateKey, L10n> = {
     ta: 'உங்கள் ஆர்டர் {orderId} ({bookTitles}) பொதி செய்யப்பட்டது, விரைவில் தபாலில் அனுப்பப்படும் 📦. உங்கள் ஆர்டரை இங்கே கண்காணிக்கவும்: {trackingUrl}',
   },
   dispatched: {
-    en: 'Good news! Your order {orderId} ({bookTitles}) has been posted via {courier}, tracking number {trackingNo}. You should receive it within 3 days. Track it here: {trackingUrl}. Thank you again for ordering {bookTitles}! 🙏 Follow our Facebook page for history stories: {facebookUrl}',
-    si: 'සුබ ආරංචියක්! ඔබගේ ඇණවුම {orderId} ({bookTitles}) {courier} මගින් තැපැල් කර ඇත. ලුහුබැඳීමේ අංකය {trackingNo}. දින 3ක් ඇතුළත ඔබට ලැබෙනු ඇත. මෙතැනින් පරීක්ෂා කරන්න: {trackingUrl}. {bookTitles} ඇණවුම් කිරීම ගැන ඔබට නැවතත් හෘදයාංගම ස්තුතිය! 🙏 ඉතිහාස කතා සඳහා අපගේ Facebook පිටුව අනුගමනය කරන්න: {facebookUrl}',
-    ta: 'நல்ல செய்தி! உங்கள் ஆர்டர் {orderId} ({bookTitles}) {courier} மூலம் அனுப்பப்பட்டது, கண்காணிப்பு எண் {trackingNo}. 3 நாட்களுக்குள் உங்களுக்குக் கிடைக்கும். இங்கே கண்காணிக்கவும்: {trackingUrl}. {bookTitles} ஆர்டர் செய்ததற்கு மீண்டும் மனமார்ந்த நன்றி! 🙏 வரலாற்றுக் கதைகளுக்கு எங்கள் Facebook பக்கத்தைப் பின்தொடருங்கள்: {facebookUrl}',
+    en: 'Good news! Your order {orderId} ({bookTitles}) has been posted via {courier}.[[ Tracking number: {trackingNo}.]] You should receive it within 3 working days. Track it here: {trackingUrl}. Thank you again for ordering {bookTitles}! 🙏 Follow our Facebook page for history stories: {facebookUrl}',
+    si: 'සුබ ආරංචියක්! ඔබගේ ඇණවුම {orderId} ({bookTitles}) {courier} මගින් තැපැල් කර ඇත.[[ ලුහුබැඳීමේ අංකය {trackingNo}.]] වැඩකරන දින 3ක් ඇතුළත ඔබට ලැබෙනු ඇත. මෙතැනින් පරීක්ෂා කරන්න: {trackingUrl}. {bookTitles} ඇණවුම් කිරීම ගැන ඔබට නැවතත් හෘදයාංගම ස්තුතිය! 🙏 ඉතිහාස කතා සඳහා අපගේ Facebook පිටුව අනුගමනය කරන්න: {facebookUrl}',
+    ta: 'நல்ல செய்தி! உங்கள் ஆர்டர் {orderId} ({bookTitles}) {courier} மூலம் அனுப்பப்பட்டது.[[ கண்காணிப்பு எண் {trackingNo}.]] 3 வேலை நாட்களுக்குள் உங்களுக்குக் கிடைக்கும். இங்கே கண்காணிக்கவும்: {trackingUrl}. {bookTitles} ஆர்டர் செய்ததற்கு மீண்டும் மனமார்ந்த நன்றி! 🙏 வரலாற்றுக் கதைகளுக்கு எங்கள் Facebook பக்கத்தைப் பின்தொடருங்கள்: {facebookUrl}',
   },
   rejected: {
     en: 'We could not verify the payment for order {orderId}: {reason}. Please reply to this message so we can help.',
@@ -36,22 +36,33 @@ export const DEFAULT_TEMPLATES: Record<TemplateKey, L10n> = {
 
 /** Earlier default texts. A saved template still equal to one of these was never edited, so
  *  the current default (with the tracking link) is used instead. Edited templates are kept. */
-export const LEGACY_TEMPLATES: Partial<Record<TemplateKey, L10n>> = {
-  acknowledged: {
-    en: 'Thank you for ordering {bookTitles}, {name}! 🙏 Your order number is {orderId}. We will verify your bank transfer shortly and start preparing your book.',
-    si: '{name}, {bookTitles} ඇණවුම් කිරීම ගැන ඔබට ස්තුතියි! 🙏 ඔබගේ ඇණවුම් අංකය {orderId}. අපි ඔබගේ බැංකු තැන්පතුව ඉක්මනින් තහවුරු කර පොත සූදානම් කිරීම අරඹන්නෙමු.',
-    ta: '{bookTitles} ஆர்டர் செய்ததற்கு நன்றி, {name}! 🙏 உங்கள் ஆர்டர் எண் {orderId}. உங்கள் வங்கிப் பரிமாற்றத்தை விரைவில் சரிபார்த்து, புத்தகத்தைத் தயார் செய்யத் தொடங்குவோம்.',
-  },
-  payment_verified: {
-    en: 'Your payment for order {orderId} has been verified ✅. We are now preparing your book for dispatch.',
-    si: 'ඇණවුම් අංක {orderId} සඳහා ඔබගේ ගෙවීම තහවුරු විය ✅. අපි දැන් ඔබගේ පොත යැවීමට සූදානම් කරමින් සිටිමු.',
-    ta: 'ஆர்டர் {orderId} க்கான உங்கள் கட்டணம் சரிபார்க்கப்பட்டது ✅. உங்கள் புத்தகத்தை அனுப்புவதற்குத் தயார் செய்து வருகிறோம்.',
-  },
-  dispatched: {
-    en: 'Good news! Your order {orderId} ({bookTitles}) has been posted via {courier}, tracking number {trackingNo}. You should receive it within 3 days. Track it here: {trackingUrl}. Follow our Facebook page for history stories: {facebookUrl}',
-    si: 'සුබ ආරංචියක්! ඔබගේ ඇණවුම {orderId} ({bookTitles}) {courier} මගින් තැපැල් කර ඇත. ලුහුබැඳීමේ අංකය {trackingNo}. දින 3ක් ඇතුළත ඔබට ලැබෙනු ඇත. මෙතැනින් පරීක්ෂා කරන්න: {trackingUrl}. ඉතිහාස කතා සඳහා අපගේ Facebook පිටුව අනුගමනය කරන්න: {facebookUrl}',
-    ta: 'நல்ல செய்தி! உங்கள் ஆர்டர் {orderId} ({bookTitles}) {courier} மூலம் அனுப்பப்பட்டது, கண்காணிப்பு எண் {trackingNo}. 3 நாட்களுக்குள் உங்களுக்குக் கிடைக்கும். இங்கே கண்காணிக்கவும்: {trackingUrl}. வரலாற்றுக் கதைகளுக்கு எங்கள் Facebook பக்கத்தைப் பின்தொடருங்கள்: {facebookUrl}',
-  },
+export const LEGACY_TEMPLATES: Partial<Record<TemplateKey, L10n[]>> = {
+  acknowledged: [
+    {
+      en: 'Thank you for ordering {bookTitles}, {name}! 🙏 Your order number is {orderId}. We will verify your bank transfer shortly and start preparing your book.',
+      si: '{name}, {bookTitles} ඇණවුම් කිරීම ගැන ඔබට ස්තුතියි! 🙏 ඔබගේ ඇණවුම් අංකය {orderId}. අපි ඔබගේ බැංකු තැන්පතුව ඉක්මනින් තහවුරු කර පොත සූදානම් කිරීම අරඹන්නෙමු.',
+      ta: '{bookTitles} ஆர்டர் செய்ததற்கு நன்றி, {name}! 🙏 உங்கள் ஆர்டர் எண் {orderId}. உங்கள் வங்கிப் பரிமாற்றத்தை விரைவில் சரிபார்த்து, புத்தகத்தைத் தயார் செய்யத் தொடங்குவோம்.',
+    },
+  ],
+  payment_verified: [
+    {
+      en: 'Your payment for order {orderId} has been verified ✅. We are now preparing your book for dispatch.',
+      si: 'ඇණවුම් අංක {orderId} සඳහා ඔබගේ ගෙවීම තහවුරු විය ✅. අපි දැන් ඔබගේ පොත යැවීමට සූදානම් කරමින් සිටිමු.',
+      ta: 'ஆர்டர் {orderId} க்கான உங்கள் கட்டணம் சரிபார்க்கப்பட்டது ✅. உங்கள் புத்தகத்தை அனுப்புவதற்குத் தயார் செய்து வருகிறோம்.',
+    },
+  ],
+  dispatched: [
+    {
+      en: 'Good news! Your order {orderId} ({bookTitles}) has been posted via {courier}, tracking number {trackingNo}. You should receive it within 3 days. Track it here: {trackingUrl}. Follow our Facebook page for history stories: {facebookUrl}',
+      si: 'සුබ ආරංචියක්! ඔබගේ ඇණවුම {orderId} ({bookTitles}) {courier} මගින් තැපැල් කර ඇත. ලුහුබැඳීමේ අංකය {trackingNo}. දින 3ක් ඇතුළත ඔබට ලැබෙනු ඇත. මෙතැනින් පරීක්ෂා කරන්න: {trackingUrl}. ඉතිහාස කතා සඳහා අපගේ Facebook පිටුව අනුගමනය කරන්න: {facebookUrl}',
+      ta: 'நல்ல செய்தி! உங்கள் ஆர்டர் {orderId} ({bookTitles}) {courier} மூலம் அனுப்பப்பட்டது, கண்காணிப்பு எண் {trackingNo}. 3 நாட்களுக்குள் உங்களுக்குக் கிடைக்கும். இங்கே கண்காணிக்கவும்: {trackingUrl}. வரலாற்றுக் கதைகளுக்கு எங்கள் Facebook பக்கத்தைப் பின்தொடருங்கள்: {facebookUrl}',
+    },
+    {
+      en: 'Good news! Your order {orderId} ({bookTitles}) has been posted via {courier}, tracking number {trackingNo}. You should receive it within 3 days. Track it here: {trackingUrl}. Thank you again for ordering {bookTitles}! 🙏 Follow our Facebook page for history stories: {facebookUrl}',
+      si: 'සුබ ආරංචියක්! ඔබගේ ඇණවුම {orderId} ({bookTitles}) {courier} මගින් තැපැල් කර ඇත. ලුහුබැඳීමේ අංකය {trackingNo}. දින 3ක් ඇතුළත ඔබට ලැබෙනු ඇත. මෙතැනින් පරීක්ෂා කරන්න: {trackingUrl}. {bookTitles} ඇණවුම් කිරීම ගැන ඔබට නැවතත් හෘදයාංගම ස්තුතිය! 🙏 ඉතිහාස කතා සඳහා අපගේ Facebook පිටුව අනුගමනය කරන්න: {facebookUrl}',
+      ta: 'நல்ல செய்தி! உங்கள் ஆர்டர் {orderId} ({bookTitles}) {courier} மூலம் அனுப்பப்பட்டது, கண்காணிப்பு எண் {trackingNo}. 3 நாட்களுக்குள் உங்களுக்குக் கிடைக்கும். இங்கே கண்காணிக்கவும்: {trackingUrl}. {bookTitles} ஆர்டர் செய்ததற்கு மீண்டும் மனமார்ந்த நன்றி! 🙏 வரலாற்றுக் கதைகளுக்கு எங்கள் Facebook பக்கத்தைப் பின்தொடருங்கள்: {facebookUrl}',
+    },
+  ],
 };
 
 export const TEMPLATE_VARS = [
@@ -68,11 +79,22 @@ export const TEMPLATE_VARS = [
 ] as const;
 export type TemplateVar = (typeof TEMPLATE_VARS)[number];
 
+/**
+ * Fills {placeholders}. Text in [[ ... ]] is optional: it is left out when a placeholder in it
+ * is empty (e.g. "[[ Tracking number: {trackingNo}.]]" when posted without one).
+ */
 export function renderTemplate(template: string, vars: Partial<Record<string, string | number>>): string {
-  return template.replace(/\{(\w+)\}/g, (whole, key: string) => {
-    const v = vars[key];
-    return v === undefined || v === null ? whole : String(v);
-  });
+  const fill = (text: string) =>
+    text.replace(/\{(\w+)\}/g, (whole, key: string) => {
+      const v = vars[key];
+      return v === undefined || v === null ? whole : String(v);
+    });
+  return fill(
+    template.replace(/\[\[([\s\S]*?)\]\]/g, (_, inner: string) => {
+      const keys = [...inner.matchAll(/\{(\w+)\}/g)].map((m) => m[1]);
+      return keys.some((k) => vars[k] === '') ? '' : inner;
+    }),
+  );
 }
 
 export function bookTitles(items: { title: L10n }[], lang: Lang): string {

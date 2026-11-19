@@ -100,7 +100,7 @@ function mergeTemplates(saved: Partial<PrivateConfig['templates']> | undefined):
     const merged: L10n = { ...DEFAULT_TEMPLATES[key] };
     for (const [lang, text] of Object.entries(l10n) as [keyof L10n, string | undefined][]) {
       if (text === undefined) continue;
-      const upgraded = legacy && legacy[lang] === text ? DEFAULT_TEMPLATES[key][lang] : undefined;
+      const upgraded = legacy?.some((v) => v[lang] === text) ? DEFAULT_TEMPLATES[key][lang] : undefined;
       merged[lang] = upgraded ?? text;
     }
     out[key] = merged;

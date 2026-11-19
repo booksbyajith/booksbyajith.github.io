@@ -495,7 +495,7 @@ export const en: Dict = {
   'admin.action.confirm': 'Confirm',
   'admin.field.courier': 'Courier',
   'admin.field.courierOther': 'Other courier',
-  'admin.field.trackingNo': 'Tracking number',
+  'admin.field.trackingNo': 'Tracking number (optional)',
   'admin.field.reason': 'Reason',
   'admin.error.transition': 'This status change is not allowed.',
   'admin.error.missing': 'Please fill in the required fields.',

@@ -156,7 +156,7 @@ export const customerDispatched = (order: OrderDoc, siteUrl: string) => {
   const t = T[order.lang];
   return customerEmail(order, siteUrl, 'dispatchedSubject', t.dispatchedBody, [
     [t.courier, order.dispatch?.courier ?? ''],
-    [t.trackingNo, order.dispatch?.trackingNo ?? ''],
+    ...(order.dispatch?.trackingNo ? [[t.trackingNo, order.dispatch.trackingNo] as [string, string]] : []),
   ]);
 };
 

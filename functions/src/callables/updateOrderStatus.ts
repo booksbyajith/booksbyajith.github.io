@@ -66,8 +66,10 @@ export async function handleUpdateOrderStatus(
       const courier = pub.couriers.find((c) => c.name.toLowerCase() === input.courier!.toLowerCase());
       patch.dispatch = {
         courier: input.courier!,
-        trackingNo: input.trackingNo!,
-        trackingUrl: buildCourierTrackingUrl(courier?.trackingUrlTemplate, input.trackingNo!),
+        trackingNo: input.trackingNo ?? '',
+        trackingUrl: input.trackingNo
+          ? buildCourierTrackingUrl(courier?.trackingUrlTemplate, input.trackingNo)
+          : null,
         dispatchedAt: now,
       };
     }

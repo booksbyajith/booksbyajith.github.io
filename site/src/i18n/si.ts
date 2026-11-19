@@ -486,7 +486,7 @@ export const si = {
   'admin.action.confirm': 'තහවුරු කරන්න',
   'admin.field.courier': 'කුරියර් සේවය',
   'admin.field.courierOther': 'වෙනත් කුරියර් සේවයක්',
-  'admin.field.trackingNo': 'ලුහුබැඳීමේ අංකය',
+  'admin.field.trackingNo': 'ලුහුබැඳීමේ අංකය (අත්‍යවශ්‍ය නොවේ)',
   'admin.field.reason': 'හේතුව',
   'admin.error.transition': 'මෙම තත්ත්ව වෙනස් කිරීමට ඉඩ නැත.',
   'admin.error.missing': 'කරුණාකර අවශ්‍ය ක්ෂේත්‍ර පුරවන්න.',

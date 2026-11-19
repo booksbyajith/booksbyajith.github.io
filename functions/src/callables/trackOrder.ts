@@ -45,7 +45,7 @@ export async function handleTrackOrder(request: CallableRequest<unknown>): Promi
     status: order.status,
     timeline: order.statusHistory.map((h) => ({ status: h.status, at: toMillis(h.at) })),
     courier: order.dispatch?.courier ?? null,
-    trackingNo: order.dispatch?.trackingNo ?? null,
+    trackingNo: order.dispatch?.trackingNo || null,
     trackingUrl: order.dispatch?.trackingUrl ?? null,
   };
 }

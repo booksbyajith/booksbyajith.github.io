@@ -95,12 +95,21 @@ describe('updateOrderStatus', () => {
     }
   });
 
-  it('requires courier and tracking number to dispatch', async () => {
+  it('requires a courier to dispatch; the tracking number is optional', async () => {
     await move('acknowledged');
     await move('payment_verified');
-    const r = await move('dispatched', { courier: 'Demo Courier' });
-    expect(r.error?.details?.code).toBe('MISSING_FIELDS');
-    expect(r.error?.details?.fields).toEqual(['trackingNo']);
+    const none = await move('dispatched');
+    expect(none.error?.details?.code).toBe('MISSING_FIELDS');
+    expect(none.error?.details?.fields).toEqual(['courier']);
+    // Ordinary post: no tracking number. The message leaves that sentence out.
+    const r = await move('dispatched', { courier: 'Sri Lanka Post' });
+    expect(r.error).toBeUndefined();
+    const text = decode(r.result.waUrl);
+    expect(text).toContain('Sri Lanka Post මගින් තැපැල් කර ඇත. වැඩකරන දින 3ක් ඇතුළත');
+    expect(text).not.toContain('ලුහුබැඳීමේ අංකය');
+    const order = (await db.doc(`orders/${orderId}`).get()).data()!;
+    expect(order.dispatch.trackingNo).toBe('');
+    expect(order.dispatch.trackingUrl).toBeNull();
   });
 
   it('requires a reason to reject, and returns stock', async () => {

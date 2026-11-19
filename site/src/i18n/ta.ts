@@ -489,7 +489,7 @@ export const ta: Dict = {
   'admin.action.confirm': 'உறுதிப்படுத்து',
   'admin.field.courier': 'கூரியர் சேவை',
   'admin.field.courierOther': 'வேறு கூரியர் சேவை',
-  'admin.field.trackingNo': 'கண்காணிப்பு எண்',
+  'admin.field.trackingNo': 'கண்காணிப்பு எண் (விருப்பத்தேர்வு)',
   'admin.field.reason': 'காரணம்',
   'admin.error.transition': 'இந்த நிலை மாற்றம் அனுமதிக்கப்படவில்லை.',
   'admin.error.missing': 'தேவையான புலங்களை நிரப்பவும்.',

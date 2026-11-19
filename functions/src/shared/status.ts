@@ -25,7 +25,8 @@ export function canTransition(from: OrderStatus, to: OrderStatus): boolean {
 export type TransitionField = 'courier' | 'trackingNo' | 'reason';
 
 export function requiredFields(to: OrderStatus): TransitionField[] {
-  if (to === 'dispatched') return ['courier', 'trackingNo'];
+  // The tracking number is optional: ordinary post has none.
+  if (to === 'dispatched') return ['courier'];
   if (to === 'rejected') return ['reason'];
   return [];
 }

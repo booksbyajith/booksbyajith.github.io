@@ -102,9 +102,9 @@ export function OrderDetail({ orderId }: { orderId: string }) {
     const c = courier === '__other' ? courierOther.trim() : courier;
     const data: Record<string, string> = { orderId, to };
     if (need.includes('courier') || to === 'dispatched') {
-      if (!c || !trackingNo.trim()) return setErr(t('admin.error.missing'));
+      if (!c) return setErr(t('admin.error.missing'));
       data.courier = c;
-      data.trackingNo = trackingNo.trim();
+      if (trackingNo.trim()) data.trackingNo = trackingNo.trim();
     }
     if (to === 'rejected' && reason.trim().length < 3) return setErr(t('admin.error.missing'));
     if ((to === 'rejected' || to === 'cancelled') && reason.trim()) data.reason = reason.trim();
@@ -454,7 +454,13 @@ export function OrderDetail({ orderId }: { orderId: string }) {
         )}
         {order.dispatch && (
           <p class="mt-2">
-            {order.dispatch.courier} · <span class="font-mono">{order.dispatch.trackingNo}</span>
+            {order.dispatch.courier}
+            {order.dispatch.trackingNo && (
+              <>
+                {' '}
+                · <span class="font-mono">{order.dispatch.trackingNo}</span>
+              </>
+            )}
           </p>
         )}
         {order.rejection && <p class="mt-2 text-danger">{order.rejection.reason}</p>}

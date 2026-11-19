@@ -31,11 +31,29 @@ describe('renderTemplate', () => {
       'Thank you for ordering Finding Sinhabahu, Nimal! 🙏 Your order number is AJ-2611-7K3Q. We will verify your bank transfer shortly and start preparing your book. Track your order here: https://example.com/en/track/#AJ-2611-7K3Q',
     );
   });
+  it('leaves out [[optional]] text when its value is empty', () => {
+    const tpl = DEFAULT_TEMPLATES.dispatched.si;
+    const base = {
+      orderId: 'AJ-2611-7K3Q',
+      bookTitles: 'Book',
+      courier: 'Sri Lanka Post',
+      trackingUrl: 'u',
+      facebookUrl: 'f',
+    };
+    const without = renderTemplate(tpl, { ...base, trackingNo: '' });
+    expect(without).not.toContain('ලුහුබැඳීමේ අංකය');
+    expect(without).not.toContain('[[');
+    expect(without).toContain('Sri Lanka Post මගින් තැපැල් කර ඇත. වැඩකරන දින 3ක් ඇතුළත');
+    const withNo = renderTemplate(tpl, { ...base, trackingNo: 'RR123LK' });
+    expect(withNo).toContain('ලුහුබැඳීමේ අංකය RR123LK.');
+  });
   it('upgrades never-edited saved templates but keeps edited ones', () => {
     const merged = mergePrivateConfig({
       templates: {
-        acknowledged: { ...LEGACY_TEMPLATES.acknowledged! },
-        payment_verified: { si: 'Edited by admin', en: LEGACY_TEMPLATES.payment_verified!.en },
+        acknowledged: { ...LEGACY_TEMPLATES.acknowledged![0] },
+        payment_verified: { si: 'Edited by admin', en: LEGACY_TEMPLATES.payment_verified![0].en },
+        // The dispatched text from before the 'working days' change also upgrades.
+        dispatched: { ...LEGACY_TEMPLATES.dispatched![1] },
       } as never,
     });
     expect(merged.templates.acknowledged.en).toBe(DEFAULT_TEMPLATES.acknowledged.en);
@@ -43,6 +61,7 @@ describe('renderTemplate', () => {
     expect(merged.templates.payment_verified.si).toBe('Edited by admin');
     expect(merged.templates.payment_verified.en).toBe(DEFAULT_TEMPLATES.payment_verified.en);
     expect(merged.templates.packed.en).toContain('{trackingUrl}');
+    expect(merged.templates.dispatched.si).toContain('වැඩකරන දින 3ක් ඇතුළත');
   });
   it('every default template exists in all three languages with the same variables', () => {
     const vars = (s: string) => [...s.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();

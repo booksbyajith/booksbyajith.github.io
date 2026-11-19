@@ -39,7 +39,7 @@ describe('state machine', () => {
 
 describe('transition rules', () => {
   it('required fields', () => {
-    expect(requiredFields('dispatched')).toEqual(['courier', 'trackingNo']);
+    expect(requiredFields('dispatched')).toEqual(['courier']); // tracking number is optional
     expect(requiredFields('rejected')).toEqual(['reason']);
     expect(requiredFields('cancelled')).toEqual([]);
     expect(requiredFields('acknowledged')).toEqual([]);
