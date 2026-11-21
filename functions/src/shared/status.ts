@@ -62,5 +62,6 @@ export function templateKeyFor(to: OrderStatus): Exclude<TemplateKey, 'back_in_s
 }
 
 export function customerEmailFor(to: OrderStatus): boolean {
-  return to === 'payment_verified' || to === 'packed' || to === 'dispatched' || to === 'rejected';
+  // Only two routine emails (order received, posted), plus a payment problem the customer must act on.
+  return to === 'dispatched' || to === 'rejected';
 }

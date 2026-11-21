@@ -15,13 +15,15 @@ const T = {
     total: 'මුළු මුදල',
     track: 'ඇණවුම පරීක්ෂා කරන්න',
     confirmSubject: 'ඔබගේ ඇණවුම ලැබුණා',
-    confirmBody: 'ඔබගේ ඇණවුමට ස්තුතියි. අපි ඔබගේ බැංකු ගෙවීම පරීක්ෂා කර ඉක්මනින් ඔබට දැනුම් දෙන්නෙමු.',
+    confirmBody:
+      'ඔබගේ ඇණවුමට අපගේ හෘදයාංගම ස්තුතිය! 🙏 අපි ඔබගේ බැංකු ගෙවීම පරීක්ෂා කර පොත තැපැල් කරන්නෙමු. ඔබගේ ඇණවුමේ ප්‍රගතිය ඕනෑම වේලාවක පහත බොත්තමෙන් පරීක්ෂා කළ හැක.',
     packedSubject: 'ඔබගේ පොත ඇසුරුම් කළා',
     packedBody: 'ඔබගේ පොත ඇසුරුම් කර තැපැල් කිරීමට සූදානම්. යැවූ පසු ලුහුබැඳීමේ අංකය ඔබට ලැබේ.',
     verifiedSubject: 'ගෙවීම තහවුරු විය',
     verifiedBody: 'ඔබගේ ගෙවීම තහවුරු විය. අපි දැන් ඔබගේ පොත යැවීමට සූදානම් කරමින් සිටිමු.',
     dispatchedSubject: 'ඔබගේ පොත යවා ඇත',
-    dispatchedBody: 'ඔබගේ ඇණවුම තැපැල් කර ඇත.',
+    dispatchedBody:
+      'සුබ ආරංචියක්! ඔබගේ ඇණවුම තැපැල් කර ඇත. වැඩකරන දින 3ක් ඇතුළත ඔබට ලැබෙනු ඇත. ඇණවුම් කිරීම ගැන ඔබට නැවතත් හෘදයාංගම ස්තුතිය! 🙏',
     courier: 'කුරියර් සේවය',
     trackingNo: 'ලුහුබැඳීමේ අංකය',
     rejectedSubject: 'ගෙවීම තහවුරු කළ නොහැකි විය',
@@ -41,14 +43,16 @@ const T = {
     total: 'Total',
     track: 'Track your order',
     confirmSubject: 'We received your order',
-    confirmBody: 'Thank you for your order. We will check your bank transfer and let you know shortly.',
+    confirmBody:
+      'Thank you very much for your order! 🙏 We will check your bank transfer and post your book. You can check your order’s progress at any time with the button below.',
     packedSubject: 'Your book is packed',
     packedBody:
       'Your book is packed and ready to post. You will receive the tracking number once it has been sent.',
     verifiedSubject: 'Payment verified',
     verifiedBody: 'Your payment has been verified. We are now preparing your book for dispatch.',
     dispatchedSubject: 'Your book is on its way',
-    dispatchedBody: 'Your order has been posted.',
+    dispatchedBody:
+      'Good news! Your order has been posted and should reach you within 3 working days. Thank you again for ordering! 🙏',
     courier: 'Courier',
     trackingNo: 'Tracking number',
     rejectedSubject: 'We could not verify your payment',
@@ -68,13 +72,15 @@ const T = {
     total: 'மொத்தம்',
     track: 'உங்கள் ஆர்டரைக் கண்காணிக்கவும்',
     confirmSubject: 'உங்கள் ஆர்டர் கிடைத்தது',
-    confirmBody: 'உங்கள் ஆர்டருக்கு நன்றி. உங்கள் வங்கிப் பரிமாற்றத்தைச் சரிபார்த்து விரைவில் உங்களுக்குத் தெரிவிப்போம்.',
+    confirmBody:
+      'உங்கள் ஆர்டருக்கு மனமார்ந்த நன்றி! 🙏 உங்கள் வங்கிப் பரிமாற்றத்தைச் சரிபார்த்து நூலைத் தபாலில் அனுப்புவோம். கீழே உள்ள பொத்தானின் மூலம் உங்கள் ஆர்டரின் நிலையை எப்போது வேண்டுமானாலும் பார்க்கலாம்.',
     packedSubject: 'உங்கள் நூல் பொதி செய்யப்பட்டது',
     packedBody: 'உங்கள் நூல் பொதி செய்யப்பட்டு அனுப்பத் தயாராக உள்ளது. அனுப்பியதும் கண்காணிப்பு எண் உங்களுக்குக் கிடைக்கும்.',
     verifiedSubject: 'கட்டணம் சரிபார்க்கப்பட்டது',
     verifiedBody: 'உங்கள் கட்டணம் சரிபார்க்கப்பட்டது. உங்கள் புத்தகத்தை அனுப்புவதற்குத் தயார் செய்து வருகிறோம்.',
     dispatchedSubject: 'உங்கள் புத்தகம் அனுப்பப்பட்டது',
-    dispatchedBody: 'உங்கள் ஆர்டர் அனுப்பப்பட்டுள்ளது.',
+    dispatchedBody:
+      'நல்ல செய்தி! உங்கள் ஆர்டர் தபாலில் அனுப்பப்பட்டது, 3 வேலை நாட்களுக்குள் உங்களுக்குக் கிடைக்கும். ஆர்டர் செய்ததற்கு மீண்டும் மனமார்ந்த நன்றி! 🙏',
     courier: 'கூரியர் சேவை',
     trackingNo: 'கண்காணிப்பு எண்',
     rejectedSubject: 'உங்கள் கட்டணத்தைச் சரிபார்க்க முடியவில்லை',
@@ -122,7 +128,7 @@ function customerEmail(
   const html = layout(
     lang,
     t[subjectKey],
-    `<p>${esc(t.hello)} ${esc(order.customer.name)},</p><p>${esc(intro)}</p>${table(rows)}${outro ? `<p>${esc(outro)}</p>` : ''}${button(trackUrl, t.track)}`,
+    `<p>${esc(t.hello)} ${esc(order.customer.name)},</p><p>${esc(intro)}</p>${table(rows)}${outro ? `<p>${esc(outro)}</p>` : ''}${button(trackUrl, t.track)}<p style="font-size:13px;word-break:break-all"><a href="${esc(trackUrl)}">${esc(trackUrl)}</a></p>`,
     `${esc(t.siteName)} · ${esc(t.footer)}`,
   );
   const text = [

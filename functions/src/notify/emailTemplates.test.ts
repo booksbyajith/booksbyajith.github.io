@@ -30,7 +30,7 @@ describe('email templates', () => {
     expect(customerDispatched(o, site).text).toContain('Demo Courier');
   });
   it('Sinhala confirmation uses Sinhala text', () => {
-    expect(customerConfirmation(testOrder({ lang: 'si' }), site).html).toContain('ස්තුතියි');
+    expect(customerConfirmation(testOrder({ lang: 'si' }), site).html).toContain('ස්තුතිය');
   });
   it('team email has full details and the admin link', () => {
     const e = teamNewOrder(testOrder({ totalMismatch: true, clientExpectedTotalLKR: 4000 }), site);

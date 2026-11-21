@@ -58,10 +58,13 @@ describe('order notifications (dev_outbox)', () => {
       const o = (await outbox(forOrder(orderId))).filter(
         (d) => d.channel === 'email' && d.meta.role === 'customer',
       );
-      return o.length >= 3 ? o : null;
+      return o.length >= 2 ? o : null;
     });
     const events = mails.map((m) => m.meta.event).sort();
-    expect(events).toEqual(['dispatched', 'new_order', 'payment_verified']);
+    // Only two routine emails: order received and posted.
+    expect(events).toEqual(['dispatched', 'new_order']);
+    const first = mails.find((m) => m.meta.event === 'new_order');
+    expect(first.text).toMatch(new RegExp(`/en/track/#${orderId}/[0-9a-f]{32}`));
     const dispatched = mails.find((m) => m.meta.event === 'dispatched');
     expect(dispatched.subject).toContain('Your book is on its way');
     expect(dispatched.text).toContain('TRK9');

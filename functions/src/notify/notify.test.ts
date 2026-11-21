@@ -66,7 +66,7 @@ describe('planSends', () => {
     ).toEqual(['email', 'email']);
   });
 
-  it.each(['payment_verified', 'dispatched', 'rejected'] as const)('%s emails the customer', (to) => {
+  it.each(['dispatched', 'rejected'] as const)('%s emails the customer', (to) => {
     const sends = planSends(
       testOrder({ status: to }),
       { eventId: 'e', from: 'acknowledged', to },
@@ -75,15 +75,18 @@ describe('planSends', () => {
     expect(sends.map((s) => `${s.channel}/${s.role}`)).toEqual(['email/customer']);
   });
 
-  it.each(['acknowledged', 'delivered', 'cancelled'] as const)('%s sends no email', (to) => {
-    expect(
-      planSends(
-        testOrder({ status: to }),
-        { eventId: 'e', from: 'pending_verification', to },
-        testSettings(),
-      ),
-    ).toEqual([]);
-  });
+  it.each(['acknowledged', 'payment_verified', 'packed', 'delivered', 'cancelled'] as const)(
+    '%s sends no email',
+    (to) => {
+      expect(
+        planSends(
+          testOrder({ status: to }),
+          { eventId: 'e', from: 'pending_verification', to },
+          testSettings(),
+        ),
+      ).toEqual([]);
+    },
+  );
 
   it('reopen sends nothing', () => {
     expect(
