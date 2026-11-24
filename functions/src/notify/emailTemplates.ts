@@ -117,6 +117,10 @@ function customerEmail(
 ): EmailContent {
   const lang = order.lang;
   const t = T[lang];
+  // "WhatsApp (+94…)" so customers can find the number straight away.
+  const footer = order.contactWhatsapp
+    ? t.footer.replace('WhatsApp', `WhatsApp (+${order.contactWhatsapp})`)
+    : t.footer;
   const trackUrl = buildTrackUrl(siteUrl, lang, order.orderId, order.trackKey);
   const subject = `${t[subjectKey]} — ${order.orderId}`;
   const rows: [string, string][] = [
@@ -128,8 +132,8 @@ function customerEmail(
   const html = layout(
     lang,
     t[subjectKey],
-    `<p>${esc(t.hello)} ${esc(order.customer.name)},</p><p>${esc(intro)}</p>${table(rows)}${outro ? `<p>${esc(outro)}</p>` : ''}${button(trackUrl, t.track)}<p style="font-size:13px;word-break:break-all"><a href="${esc(trackUrl)}">${esc(trackUrl)}</a></p>`,
-    `${esc(t.siteName)} · ${esc(t.footer)}`,
+    `<p>${esc(t.hello)} ${esc(order.customer.name)},</p><p>${esc(intro)}</p>${table(rows)}${outro ? `<p>${esc(outro)}</p>` : ''}${button(trackUrl, t.track)}`,
+    `${esc(t.siteName)} · ${esc(footer)}`,
   );
   const text = [
     `${t.hello} ${order.customer.name},`,
@@ -144,7 +148,7 @@ function customerEmail(
     '',
     `${t.track}: ${trackUrl}`,
     '',
-    t.footer,
+    footer,
   ].join('\n');
   return { subject, html, text };
 }

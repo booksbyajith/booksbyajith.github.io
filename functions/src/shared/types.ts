@@ -157,6 +157,8 @@ export interface OrderDoc {
   geo: { lat: number; lng: number; accuracyM: number; capturedAt: Ts } | null;
   /** Tracking-link key, added when a message or email is built (never stored). */
   trackKey?: string;
+  /** Our WhatsApp number for customer emails, added when an email is built (never stored). */
+  contactWhatsapp?: string;
   /** Bank-transfer reference shown to the customer before payment (order number without dashes). */
   paymentRef?: string;
   items: OrderItem[];

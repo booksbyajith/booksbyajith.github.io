@@ -6,7 +6,11 @@ import { trackKeyFor } from '../lib/trackKey.js';
 export async function notify(stored: OrderDoc, event: NotifyEvent) {
   const settings = await runtimeSettings();
   // Emails link to the order's tracking page with its private key.
-  const order = { ...stored, trackKey: trackKeyFor(stored.orderId) };
+  const order = {
+    ...stored,
+    trackKey: trackKeyFor(stored.orderId),
+    contactWhatsapp: settings.pub.contact.whatsappNumber || undefined,
+  };
   const sends = planSends(order, event, settings);
   return runSends(
     sends,
