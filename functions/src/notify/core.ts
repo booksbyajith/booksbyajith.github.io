@@ -1,7 +1,6 @@
 import { customerEmailFor } from '../shared/status.js';
 import type { OrderDoc, OrderStatus, PrivateConfig, PublicConfig, WaEvent } from '../shared/types.js';
 import {
-  customerConfirmation,
   customerDispatched,
   customerRejected,
   customerVerified,
@@ -27,6 +26,7 @@ export interface NotifySettings {
   priv: PrivateConfig;
   templateVars: (order: OrderDoc) => Record<string, string>;
   loadSlip: (order: OrderDoc) => Promise<EmailAttachment | null>;
+  buildReceipt: (order: OrderDoc) => Promise<EmailAttachment | null>;
 }
 
 export interface Send {
@@ -57,16 +57,6 @@ export function planSends(order: OrderDoc, e: NotifyEvent, s: NotifySettings): S
           );
         },
       });
-    if (customerEmail)
-      sends.push({
-        channel: 'email',
-        role: 'customer',
-        run: (c) =>
-          c.email(
-            { to: [customerEmail], ...customerConfirmation(order, s.siteUrl) },
-            { ...meta, role: 'customer' },
-          ),
-      });
     if (s.telegramEnabled)
       sends.push({
         channel: 'telegram',
@@ -88,7 +78,14 @@ export function planSends(order: OrderDoc, e: NotifyEvent, s: NotifySettings): S
     sends.push({
       channel: 'email',
       role: 'customer',
-      run: (c) => c.email({ to: [customerEmail], ...tpl(order, s.siteUrl) }, { ...meta, role: 'customer' }),
+      run: async (c) => {
+        // The payment confirmation carries the order receipt (PDF).
+        const receipt = e.to === 'payment_verified' ? await s.buildReceipt(order) : null;
+        await c.email(
+          { to: [customerEmail], ...tpl(order, s.siteUrl), attachments: receipt ? [receipt] : [] },
+          { ...meta, role: 'customer' },
+        );
+      },
     });
   }
 

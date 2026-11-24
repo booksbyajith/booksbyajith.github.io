@@ -15,7 +15,7 @@ describe('order notifications (dev_outbox)', () => {
     const orderId = (await call('createOrder', await orderInput())).result.orderId;
     const items = await waitFor(async () => {
       const o = await outbox(forOrder(orderId));
-      return o.length >= 3 ? o : null;
+      return o.length >= 2 ? o : null;
     });
     const team = items.find((d) => d.channel === 'email' && d.meta.role === 'team');
     expect(team.to).toEqual(['team@example.com', 'team2@example.com']);
@@ -23,10 +23,8 @@ describe('order notifications (dev_outbox)', () => {
     expect(team.attachments).toEqual([
       { filename: `slip-${orderId}.jpg`, sizeBytes: expect.any(Number), contentType: 'image/jpeg' },
     ]);
-    const cust = items.find((d) => d.channel === 'email' && d.meta.role === 'customer');
-    expect(cust.to).toEqual(['customer@example.com']);
-    expect(cust.attachments).toEqual([]);
-    expect(cust.html).toContain('lang="si"');
+    // The customer is emailed when the payment is confirmed, not when the order arrives.
+    expect(items.find((d) => d.meta.role === 'customer')).toBeUndefined();
     const tg = items.find((d) => d.channel === 'telegram');
     for (const pii of ['Test Customer', '94770000001', 'customer@example.com', 'Test Road'])
       expect(tg.text).not.toContain(pii);
@@ -62,9 +60,14 @@ describe('order notifications (dev_outbox)', () => {
     });
     const events = mails.map((m) => m.meta.event).sort();
     // Only two routine emails: order received and posted.
-    expect(events).toEqual(['dispatched', 'new_order']);
-    const first = mails.find((m) => m.meta.event === 'new_order');
+    // Two emails: payment confirmed (with the receipt PDF) and posted.
+    expect(events).toEqual(['dispatched', 'payment_verified']);
+    const first = mails.find((m) => m.meta.event === 'payment_verified');
     expect(first.text).toMatch(new RegExp(`/en/track/#${orderId}/[0-9a-f]{32}`));
+    expect(first.attachments).toEqual([
+      { filename: `receipt-${orderId}.pdf`, sizeBytes: expect.any(Number), contentType: 'application/pdf' },
+    ]);
+    expect(first.attachments[0].sizeBytes).toBeGreaterThan(20_000);
     const dispatched = mails.find((m) => m.meta.event === 'dispatched');
     expect(dispatched.subject).toContain('Your book is on its way');
     expect(dispatched.text).toContain('TRK9');
@@ -97,22 +100,22 @@ describe('order notifications (dev_outbox)', () => {
 
   it('does not send duplicates when the same audit event is written again', async () => {
     const orderId = (await call('createOrder', await orderInput())).result.orderId;
-    await waitFor(async () => (await outbox(forOrder(orderId))).length >= 3);
+    await waitFor(async () => (await outbox(forOrder(orderId))).length >= 2);
     const audit = (await db.collection(`orders/${orderId}/audit`).get()).docs[0];
     // Simulate a retry: delete and re-create the same event id.
     const data = audit.data();
     await audit.ref.delete();
     await audit.ref.set(data);
     await new Promise((r) => setTimeout(r, 2500));
-    expect(await outbox(forOrder(orderId))).toHaveLength(3);
-    expect((await db.collection('notification_log').get()).size).toBe(3);
+    expect(await outbox(forOrder(orderId))).toHaveLength(2);
+    expect((await db.collection('notification_log').get()).size).toBe(2);
   });
 
   it('acknowledged and delivered send no email', async () => {
     const orderId = (await call('createOrder', await orderInput())).result.orderId;
-    await waitFor(async () => (await outbox(forOrder(orderId))).length >= 3);
+    await waitFor(async () => (await outbox(forOrder(orderId))).length >= 2);
     await call('updateOrderStatus', { orderId, to: 'acknowledged' }, { idToken: admin });
     await new Promise((r) => setTimeout(r, 2000));
-    expect(await outbox(forOrder(orderId))).toHaveLength(3);
+    expect(await outbox(forOrder(orderId))).toHaveLength(2);
   });
 });

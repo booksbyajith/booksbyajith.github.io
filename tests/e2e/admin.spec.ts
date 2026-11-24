@@ -89,8 +89,8 @@ test('admin acknowledges, verifies and dispatches with WhatsApp links and emails
     );
     return o.length >= 3 ? o.sort() : null;
   });
-  // Customers get two emails only: order received and posted.
-  expect(mails).toEqual(['customer:dispatched', 'customer:new_order', 'team:new_order']);
+  // Customers get two emails: payment confirmed (with the receipt) and posted.
+  expect(mails).toEqual(['customer:dispatched', 'customer:payment_verified', 'team:new_order']);
 
   // The customer's tracking page shows the courier details.
   await page.goto(`track/#${orderId}`);

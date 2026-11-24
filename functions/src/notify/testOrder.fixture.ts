@@ -82,6 +82,11 @@ export function testSettings(overrides: Partial<NotifySettings> = {}): NotifySet
       content: Buffer.from([1, 2, 3]),
       contentType: 'image/jpeg',
     }),
+    buildReceipt: async (o) => ({
+      filename: `receipt-${o.orderId}.pdf`,
+      content: Buffer.from('%PDF-1.4'),
+      contentType: 'application/pdf',
+    }),
     ...overrides,
   };
 }

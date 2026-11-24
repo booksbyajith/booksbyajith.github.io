@@ -1,3 +1,5 @@
+import { buildReceiptPdf } from '../lib/receiptPdf.js';
+import { buildTrackUrl } from '../shared/templates.js';
 import {
   MAIL_FROM,
   SITE_URL,
@@ -133,6 +135,12 @@ export async function loadSlip(order: OrderDoc): Promise<EmailAttachment | null>
   return { filename: `slip-${order.orderId}.${ext}`, content, contentType: order.slip.contentType };
 }
 
+export async function buildReceipt(order: OrderDoc): Promise<EmailAttachment | null> {
+  const url = buildTrackUrl(SITE_URL.value(), order.lang, order.orderId, order.trackKey);
+  const content = await buildReceiptPdf(order, url);
+  return { filename: `receipt-${order.orderId}.pdf`, content, contentType: 'application/pdf' };
+}
+
 export async function runtimeSettings(): Promise<NotifySettings> {
   const [pub, priv] = await Promise.all([getPublicConfig(), getPrivateConfig()]);
   return {
@@ -147,6 +155,7 @@ export async function runtimeSettings(): Promise<NotifySettings> {
     priv,
     templateVars: (o) => templateVars(o, pub),
     loadSlip,
+    buildReceipt,
   };
 }
 

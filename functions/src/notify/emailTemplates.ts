@@ -20,7 +20,8 @@ const T = {
     packedSubject: 'ඔබගේ පොත ඇසුරුම් කළා',
     packedBody: 'ඔබගේ පොත ඇසුරුම් කර තැපැල් කිරීමට සූදානම්. යැවූ පසු ලුහුබැඳීමේ අංකය ඔබට ලැබේ.',
     verifiedSubject: 'ගෙවීම තහවුරු විය',
-    verifiedBody: 'ඔබගේ ගෙවීම තහවුරු විය. අපි දැන් ඔබගේ පොත යැවීමට සූදානම් කරමින් සිටිමු.',
+    verifiedBody:
+      'ඔබගේ ඇණවුමට අපගේ හෘදයාංගම ස්තුතිය! 🙏 ඔබගේ ගෙවීම තහවුරු වූ අතර, අපි දැන් ඔබගේ පොත තැපැල් කිරීමට සූදානම් කරමින් සිටිමු. ඔබගේ රිසිට්පත මෙම ඊමේල් පණිවිඩයට අමුණා ඇත. ඔබගේ ඇණවුමේ ප්‍රගතිය ඕනෑම වේලාවක පහත බොත්තමෙන් පරීක්ෂා කළ හැක.',
     dispatchedSubject: 'ඔබගේ පොත යවා ඇත',
     dispatchedBody:
       'සුබ ආරංචියක්! ඔබගේ ඇණවුම තැපැල් කර ඇත. වැඩකරන දින 3ක් ඇතුළත ඔබට ලැබෙනු ඇත. ඇණවුම් කිරීම ගැන ඔබට නැවතත් හෘදයාංගම ස්තුතිය! 🙏',
@@ -49,7 +50,8 @@ const T = {
     packedBody:
       'Your book is packed and ready to post. You will receive the tracking number once it has been sent.',
     verifiedSubject: 'Payment verified',
-    verifiedBody: 'Your payment has been verified. We are now preparing your book for dispatch.',
+    verifiedBody:
+      'Thank you very much for your order! 🙏 Your payment has been confirmed and we are now preparing your book for posting. Your receipt is attached to this email. You can check your order’s progress at any time with the button below.',
     dispatchedSubject: 'Your book is on its way',
     dispatchedBody:
       'Good news! Your order has been posted and should reach you within 3 working days. Thank you again for ordering! 🙏',
@@ -77,7 +79,8 @@ const T = {
     packedSubject: 'உங்கள் நூல் பொதி செய்யப்பட்டது',
     packedBody: 'உங்கள் நூல் பொதி செய்யப்பட்டு அனுப்பத் தயாராக உள்ளது. அனுப்பியதும் கண்காணிப்பு எண் உங்களுக்குக் கிடைக்கும்.',
     verifiedSubject: 'கட்டணம் சரிபார்க்கப்பட்டது',
-    verifiedBody: 'உங்கள் கட்டணம் சரிபார்க்கப்பட்டது. உங்கள் புத்தகத்தை அனுப்புவதற்குத் தயார் செய்து வருகிறோம்.',
+    verifiedBody:
+      'உங்கள் ஆர்டருக்கு மனமார்ந்த நன்றி! 🙏 உங்கள் கட்டணம் உறுதிசெய்யப்பட்டது, உங்கள் நூலைத் தபாலில் அனுப்பத் தயார் செய்து வருகிறோம். உங்கள் ரசீது இந்த மின்னஞ்சலுடன் இணைக்கப்பட்டுள்ளது. கீழே உள்ள பொத்தானின் மூலம் உங்கள் ஆர்டரின் நிலையை எப்போது வேண்டுமானாலும் பார்க்கலாம்.',
     dispatchedSubject: 'உங்கள் புத்தகம் அனுப்பப்பட்டது',
     dispatchedBody:
       'நல்ல செய்தி! உங்கள் ஆர்டர் தபாலில் அனுப்பப்பட்டது, 3 வேலை நாட்களுக்குள் உங்களுக்குக் கிடைக்கும். ஆர்டர் செய்ததற்கு மீண்டும் மனமார்ந்த நன்றி! 🙏',

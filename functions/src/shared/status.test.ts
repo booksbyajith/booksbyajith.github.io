@@ -58,6 +58,6 @@ describe('transition rules', () => {
     expect(templateKeyFor('cancelled')).toBeNull();
   });
   it('customer emails', () => {
-    expect(ORDER_STATUSES.filter(customerEmailFor)).toEqual(['dispatched', 'rejected']);
+    expect(ORDER_STATUSES.filter(customerEmailFor)).toEqual(['payment_verified', 'dispatched', 'rejected']);
   });
 });

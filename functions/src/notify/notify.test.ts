@@ -39,16 +39,26 @@ const ctx = { orderId: 'AJ-2611-7K3Q', eventId: 'e1', event: 'new_order' };
 const newOrder = { eventId: 'e1', from: null, to: 'pending_verification' as const };
 
 describe('planSends', () => {
-  it('new order: team email with slip, customer confirmation, telegram', async () => {
+  it('new order: team email with slip and telegram; the customer is emailed once the payment is confirmed', async () => {
     const { c, sent } = fakeChannels();
     await runSends(planSends(testOrder(), newOrder, testSettings()), ctx, c, memoryLedger());
     expect(sent.map((s) => `${s.channel}:${JSON.stringify(s.to)}`)).toEqual([
       'email:["team@example.com"]',
-      'email:["customer@example.com"]',
       'telegram:"team"',
     ]);
     expect(sent[0].attachments).toBe(1);
-    expect(sent[1].attachments).toBe(0);
+  });
+
+  it('payment confirmed: the customer email carries the receipt PDF', async () => {
+    const { c, sent } = fakeChannels();
+    const sends = planSends(
+      testOrder({ status: 'payment_verified' }),
+      { eventId: 'e', from: 'acknowledged', to: 'payment_verified' },
+      testSettings(),
+    );
+    await runSends(sends, ctx, c, memoryLedger());
+    const mail = sent.find((s) => s.channel === 'email');
+    expect(mail?.attachments).toBe(1);
   });
 
   it('no customer email when none was given', () => {
@@ -63,10 +73,10 @@ describe('planSends', () => {
   it('telegram skipped when disabled', () => {
     expect(
       planSends(testOrder(), newOrder, testSettings({ telegramEnabled: false })).map((s) => s.channel),
-    ).toEqual(['email', 'email']);
+    ).toEqual(['email']);
   });
 
-  it.each(['dispatched', 'rejected'] as const)('%s emails the customer', (to) => {
+  it.each(['payment_verified', 'dispatched', 'rejected'] as const)('%s emails the customer', (to) => {
     const sends = planSends(
       testOrder({ status: to }),
       { eventId: 'e', from: 'acknowledged', to },
@@ -75,18 +85,15 @@ describe('planSends', () => {
     expect(sends.map((s) => `${s.channel}/${s.role}`)).toEqual(['email/customer']);
   });
 
-  it.each(['acknowledged', 'payment_verified', 'packed', 'delivered', 'cancelled'] as const)(
-    '%s sends no email',
-    (to) => {
-      expect(
-        planSends(
-          testOrder({ status: to }),
-          { eventId: 'e', from: 'pending_verification', to },
-          testSettings(),
-        ),
-      ).toEqual([]);
-    },
-  );
+  it.each(['acknowledged', 'packed', 'delivered', 'cancelled'] as const)('%s sends no email', (to) => {
+    expect(
+      planSends(
+        testOrder({ status: to }),
+        { eventId: 'e', from: 'pending_verification', to },
+        testSettings(),
+      ),
+    ).toEqual([]);
+  });
 
   it('reopen sends nothing', () => {
     expect(
@@ -143,9 +150,9 @@ describe('runSends idempotency', () => {
     const ledger = memoryLedger();
     const { c, sent } = fakeChannels();
     const sends = planSends(testOrder(), newOrder, testSettings());
-    expect(await runSends(sends, ctx, c, ledger)).toEqual({ sent: 3, skipped: 0, failed: 0 });
-    expect(await runSends(sends, ctx, c, ledger)).toEqual({ sent: 0, skipped: 3, failed: 0 });
-    expect(sent).toHaveLength(3);
+    expect(await runSends(sends, ctx, c, ledger)).toEqual({ sent: 2, skipped: 0, failed: 0 });
+    expect(await runSends(sends, ctx, c, ledger)).toEqual({ sent: 0, skipped: 2, failed: 0 });
+    expect(sent).toHaveLength(2);
   });
 
   it('a failed send is recorded, released and retried alone', async () => {
@@ -153,10 +160,10 @@ describe('runSends idempotency', () => {
     const sends = planSends(testOrder(), newOrder, testSettings());
     const first = fakeChannels('telegram');
     await expect(runSends(sends, ctx, first.c, ledger)).rejects.toBeInstanceOf(NotifyError);
-    expect(first.sent).toHaveLength(2);
+    expect(first.sent).toHaveLength(1);
     expect(ledger.failures).toHaveLength(1);
     const retry = fakeChannels();
-    expect(await runSends(sends, ctx, retry.c, ledger)).toEqual({ sent: 1, skipped: 2, failed: 0 });
+    expect(await runSends(sends, ctx, retry.c, ledger)).toEqual({ sent: 1, skipped: 1, failed: 0 });
     expect(retry.sent.map((s) => s.channel)).toEqual(['telegram']);
   });
 });
@@ -177,7 +184,7 @@ describe('emulator transport', () => {
     const { outboxChannels } = await import('./runtime.js');
     const sends = planSends(testOrder(), newOrder, testSettings());
     await runSends(sends, ctx, outboxChannels(), memoryLedger());
-    expect(added).toHaveLength(3);
+    expect(added).toHaveLength(2);
     expect(createTransport).not.toHaveBeenCalled();
     expect(fetchSpy).not.toHaveBeenCalled();
     fetchSpy.mockRestore();
