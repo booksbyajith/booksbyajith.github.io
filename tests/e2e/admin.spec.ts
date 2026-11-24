@@ -87,14 +87,10 @@ test('admin acknowledges, verifies and dispatches with WhatsApp links and emails
     const o = (await outbox((d) => d.meta?.orderId === orderId && d.channel === 'email')).map(
       (d) => `${d.meta.role}:${d.meta.event}`,
     );
-    return o.length >= 4 ? o.sort() : null;
+    return o.length >= 3 ? o.sort() : null;
   });
-  expect(mails).toEqual([
-    'customer:dispatched',
-    'customer:new_order',
-    'customer:payment_verified',
-    'team:new_order',
-  ]);
+  // Customers get two emails only: order received and posted.
+  expect(mails).toEqual(['customer:dispatched', 'customer:new_order', 'team:new_order']);
 
   // The customer's tracking page shows the courier details.
   await page.goto(`track/#${orderId}`);
@@ -147,4 +143,29 @@ test('packed orders get a WhatsApp button and the address can be corrected', asy
     '421/I/1 Colombo Road, Namaldeniya, Parakaduwa',
   );
   expect((await db.doc(`orders/${orderId}`).get()).get('address.city')).toBe('Parakaduwa');
+});
+
+test('copy order details for the packing staff once the payment is confirmed', async ({ page, context }) => {
+  const orderId = await placeOrder(page);
+  await makeUser('admin@example.com', true);
+  const admin = await context.newPage();
+  await admin.addInitScript(() => {
+    const w = window as unknown as { __copied?: string };
+    navigator.clipboard.writeText = async (text: string) => {
+      w.__copied = text;
+    };
+  });
+  await adminLogin(admin);
+  await admin.goto(`admin/#/orders/${orderId}`);
+  await expect(admin.locator('[data-screen="order-detail"]')).toBeVisible();
+  // Not before the payment is confirmed.
+  await expect(admin.locator('[data-testid="copy-staff"]')).toHaveCount(0);
+  await db.doc(`orders/${orderId}`).update({ status: 'payment_verified' });
+  await admin.click('[data-testid="copy-staff"]');
+  const text = await admin.evaluate(() => (window as unknown as { __copied?: string }).__copied ?? '');
+  expect(text.startsWith(orderId)).toBe(true);
+  expect(text).toContain(CUSTOMER.name);
+  expect(text).toContain(CUSTOMER.line1);
+  expect(text).toContain('+94770000001');
+  await expect(admin.locator('[data-testid="copy-staff"]')).toContainText('✓');
 });

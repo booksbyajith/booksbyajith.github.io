@@ -479,6 +479,8 @@ export const si = {
   'admin.action.reopen': 'නැවත විවෘත කරන්න',
   'admin.action.sendWhatsapp': 'WhatsApp පණිවිඩය යවන්න',
   'admin.action.resend': 'නැවත පණිවිඩය යවන්න',
+  'admin.action.copyForStaff': 'කාර්ය මණ්ඩලයට ඇණවුම් විස්තර පිටපත් කරන්න',
+  'admin.action.copied': 'පිටපත් විය',
   'admin.action.whatsappStage': 'WhatsApp පණිවිඩය යවන්න ({status})',
   'admin.order.editAddress': 'ලිපිනය සංස්කරණය කරන්න',
   'admin.order.saveAddress': 'ලිපිනය සුරකින්න',

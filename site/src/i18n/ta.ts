@@ -482,6 +482,8 @@ export const ta: Dict = {
   'admin.action.reopen': 'மீண்டும் திற',
   'admin.action.sendWhatsapp': 'WhatsApp செய்தி அனுப்பு',
   'admin.action.resend': 'மீண்டும் செய்தி அனுப்பு',
+  'admin.action.copyForStaff': 'ஊழியர்களுக்கு ஆர்டர் விவரங்களை நகலெடு',
+  'admin.action.copied': 'நகலெடுக்கப்பட்டது',
   'admin.action.whatsappStage': 'WhatsApp செய்தி அனுப்பு ({status})',
   'admin.order.editAddress': 'முகவரியைத் திருத்து',
   'admin.order.saveAddress': 'முகவரியைச் சேமி',

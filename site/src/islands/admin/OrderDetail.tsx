@@ -97,6 +97,39 @@ export function OrderDetail({ orderId }: { orderId: string }) {
     return buildWaUrl(order.customer.whatsapp, text);
   })();
 
+  // Order details for the packing staff (pasted into WhatsApp), once the payment is confirmed.
+  const [copied, setCopied] = useState(false);
+  const staffText = () => {
+    const a = order.address;
+    return [
+      `${order.orderId}`,
+      ...order.items.map((i) => `${tl(i.title, 'si')} × ${i.qty}`),
+      order.signedCopy ? '✍ Signed copy' : '',
+      order.dedicationNote ? `Dedication: ${order.dedicationNote}` : '',
+      '',
+      order.customer.name,
+      [a.line1, a.line2, a.city].filter(Boolean).join(', '),
+      regionLine(a, 'en'),
+      a.landmark ?? '',
+      `📞 +${order.customer.mobile}`,
+      order.customer.whatsapp && order.customer.whatsapp !== order.customer.mobile
+        ? `WhatsApp +${order.customer.whatsapp}`
+        : '',
+    ]
+      .filter((l, i, all) => l !== '' || (i > 0 && all[i - 1] !== ''))
+      .join('\n')
+      .trim();
+  };
+  const copyForStaff = async () => {
+    try {
+      await navigator.clipboard.writeText(staffText());
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      window.prompt(t('admin.action.copyForStaff'), staffText());
+    }
+  };
+
   const act = async (to: OrderStatus) => {
     const need = requiredFields(to);
     const c = courier === '__other' ? courierOther.trim() : courier;
@@ -207,6 +240,11 @@ export function OrderDetail({ orderId }: { orderId: string }) {
               {t(ACTION[to])}
             </button>
           ))}
+          {(order.status === 'payment_verified' || order.status === 'packed') && (
+            <button type="button" class="btn-secondary" onClick={copyForStaff} data-testid="copy-staff">
+              {copied ? `✓ ${t('admin.action.copied')}` : `⧉ ${t('admin.action.copyForStaff')}`}
+            </button>
+          )}
           {resendUrl && !waUrl && (
             <a class="btn-secondary" href={resendUrl} target="_blank" rel="noopener" data-testid="resend-wa">
               {t('admin.action.whatsappStage', { status: t(`status.${order.status}` as I18nKey) })} ↗

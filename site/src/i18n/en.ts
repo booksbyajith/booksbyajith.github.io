@@ -488,6 +488,8 @@ export const en: Dict = {
   'admin.action.reopen': 'Reopen',
   'admin.action.sendWhatsapp': 'Send WhatsApp message',
   'admin.action.resend': 'Message again',
+  'admin.action.copyForStaff': 'Copy order details for staff',
+  'admin.action.copied': 'Copied',
   'admin.action.whatsappStage': 'Send WhatsApp message ({status})',
   'admin.order.editAddress': 'Edit address',
   'admin.order.saveAddress': 'Save address',
