@@ -182,15 +182,16 @@ export const en: Dict = {
   'howto.step1':
     'Within Sri Lanka: since the postal fee is included in the price of the book, please deposit the amount corresponding to the value of the book you are ordering into the account below. You can also make a debit card deposit using this page.',
   'howto.pickup': 'You can also buy the book in person for Rs. {price} at {name} ({address}).',
-  'howto.step2': 'Account details:',
+  'howto.step2':
+    'Choose the book you want to order from the list below, then deposit the amount into the account shown in the next step. (You can easily copy these account details after choosing your book):',
   'howto.accountName': 'Account name',
   'howto.bank': 'Bank',
   'howto.accountNumber': 'Account number',
   'howto.branch': 'Branch',
   'howto.country': 'Sri Lanka',
   'howto.step3a':
-    'Send a copy of your receipt along with your name and the postal address to the WhatsApp number',
-  'howto.step3b': ', or upload it on this page.',
+    'Upload a copy of your receipt on this page with your name and postal address, or send it to the WhatsApp number',
+  'howto.step3b': '.',
   'howto.step4': 'You will receive a message once the books you ordered have been posted.',
   'order.title': 'Order books',
   'order.step.books': 'Books',
