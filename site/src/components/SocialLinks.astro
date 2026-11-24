@@ -1,0 +1,57 @@
+---
+// Round Facebook / YouTube / TikTok buttons (light on a dark background). Each link comes
+// from admin Settings and stays hidden until it is set.
+import type { Lang } from '@shared/constants';
+import { useT } from '../i18n';
+import SocialIcon from './SocialIcon.astro';
+
+interface Props {
+  lang: Lang;
+  class?: string;
+}
+const { lang, class: cls } = Astro.props;
+const t = useT(lang);
+const links = [
+  ['facebook', t('footer.facebook')],
+  ['youtube', t('footer.youtube')],
+  ['tiktok', t('footer.tiktok')],
+] as const;
+---
+
+<ul class:list={['flex items-center gap-3', cls]} aria-label={t('footer.social')} data-testid="social-links">
+  {links.map(([kind, label]) => (
+    <li data-config-wrap hidden>
+      <a
+        href="#"
+        data-config={kind}
+        hidden
+        class="social-btn"
+        rel="noopener"
+        target="_blank"
+        aria-label={label}
+        title={label}
+      >
+        <SocialIcon name={kind} />
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .social-btn {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--color-paper) 35%, transparent);
+    color: var(--color-paper);
+    text-decoration: none;
+  }
+  .social-btn:hover,
+  .social-btn:focus-visible {
+    background: var(--color-paper);
+    color: var(--color-night);
+  }
+</style>

@@ -25,7 +25,7 @@ const info = [
   ['/terms/', t('footer.terms')],
   ['/privacy/', t('footer.privacy')],
 ];
-import SocialIcon from './SocialIcon.astro';
+import SocialLinks from './SocialLinks.astro';
 ---
 
 <footer class="site-footer relative mt-24 overflow-hidden bg-night text-paper">
@@ -35,36 +35,7 @@ import SocialIcon from './SocialIcon.astro';
       <p class="font-serif text-3xl font-semibold text-paper">{t('site.name')}</p>
       <p class="mt-1 eyebrow text-gold-light">{t('site.tagline')}</p>
       <p class="mt-4 max-w-prose text-paper/80">{t('footer.about')}</p>
-      <ul class="mt-5 flex items-center gap-3" aria-label={t('footer.social')}>
-        <li data-config-wrap hidden>
-          <a
-            href="#"
-            data-config="facebook"
-            hidden
-            class="social-btn"
-            rel="noopener"
-            target="_blank"
-            aria-label={t('footer.facebook')}
-            title={t('footer.facebook')}
-          >
-            <SocialIcon name="facebook" />
-          </a>
-        </li>
-        <li data-config-wrap hidden>
-          <a
-            href="#"
-            data-config="tiktok"
-            hidden
-            class="social-btn"
-            rel="noopener"
-            target="_blank"
-            aria-label={t('footer.tiktok')}
-            title={t('footer.tiktok')}
-          >
-            <SocialIcon name="tiktok" />
-          </a>
-        </li>
-      </ul>
+      <SocialLinks lang={lang} class="mt-5" />
       <slot />
       <div class="mt-8 rounded-2xl bg-paper p-5 text-ink shadow-xl">
         <p class="font-serif text-2xl font-semibold">{t('home.newsletter.title')}</p>
@@ -129,24 +100,5 @@ import SocialIcon from './SocialIcon.astro';
     background: url('../assets/map-bg.svg') no-repeat right -80px center / 520px auto;
     opacity: 0.08;
     filter: invert(1);
-  }
-</style>
-
-<style>
-  .social-btn {
-    display: inline-flex;
-    width: 2.75rem;
-    height: 2.75rem;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9999px;
-    border: 1px solid color-mix(in srgb, var(--color-paper) 35%, transparent);
-    color: var(--color-paper);
-    text-decoration: none;
-  }
-  .social-btn:hover,
-  .social-btn:focus-visible {
-    background: var(--color-paper);
-    color: var(--color-night);
   }
 </style>

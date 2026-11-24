@@ -69,6 +69,7 @@ export interface PublicConfig {
     orderPhone: string;
     facebookPageUrl: string;
     tiktokUrl?: string;
+    youtubeUrl?: string;
     email?: string;
     /** Where the book can be bought in person (shown only when the name and price are set). */
     pickupName?: string;

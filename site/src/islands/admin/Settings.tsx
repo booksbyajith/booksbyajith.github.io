@@ -276,6 +276,12 @@ export function Settings() {
           onInput={(v) => setP('contact', { ...pub.contact, tiktokUrl: v })}
         />
         <TextIn
+          label={t('admin.settings.youtubeUrl')}
+          type="url"
+          value={pub.contact.youtubeUrl ?? ''}
+          onInput={(v) => setP('contact', { ...pub.contact, youtubeUrl: v })}
+        />
+        <TextIn
           label={t('admin.settings.contactEmail')}
           type="email"
           value={pub.contact.email ?? ''}

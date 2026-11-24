@@ -42,6 +42,7 @@ export const ta: Dict = {
   'footer.facebook': 'Facebook பக்கம்',
   'footer.social': 'சமூக ஊடகங்கள்',
   'footer.tiktok': 'TikTok',
+  'footer.youtube': 'YouTube',
   'footer.rights': 'அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.',
   'footer.newsletter': 'புதிய புத்தகங்கள் மற்றும் நிகழ்வுகள் பற்றிய செய்திகளைப் பெறுங்கள்',
 
@@ -527,6 +528,7 @@ export const ta: Dict = {
   'admin.settings.orderPhone': 'ஆர்டர் தொலைபேசி எண்',
   'admin.settings.facebookUrl': 'Facebook பக்க URL',
   'admin.settings.tiktokUrl': 'TikTok கணக்கின் URL',
+  'admin.settings.youtubeUrl': 'YouTube சேனல் URL',
   'admin.settings.contactEmail': 'தொடர்பு மின்னஞ்சல் (இணையதளத்தில் காட்டப்படும்)',
   'admin.settings.pickupPrice': 'விலை (ரூ.)',
   'admin.settings.pickupMapUrl': 'Google Maps இணைப்பு',

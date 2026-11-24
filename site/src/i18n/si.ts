@@ -40,6 +40,7 @@ export const si = {
   'footer.facebook': 'Facebook පිටුව',
   'footer.social': 'සමාජ මාධ්\u200dය',
   'footer.tiktok': 'TikTok',
+  'footer.youtube': 'YouTube',
   'footer.rights': 'සියලු හිමිකම් ඇවිරිණි.',
   'footer.newsletter': 'නව පොත් සහ උත්සව පිළිබඳ පුවත් ලබා ගන්න',
 
@@ -524,6 +525,7 @@ export const si = {
   'admin.settings.orderPhone': 'ඇණවුම් දුරකථන අංකය',
   'admin.settings.facebookUrl': 'Facebook පිටුවේ URL',
   'admin.settings.tiktokUrl': 'TikTok ගිණුමේ URL',
+  'admin.settings.youtubeUrl': 'YouTube නාලිකාවේ URL',
   'admin.settings.contactEmail': 'සම්බන්ධතා ඊමේල් ලිපිනය (වෙබ් අඩවියේ පෙන්වයි)',
   'admin.settings.pickupPrice': 'මිල (රු.)',
   'admin.settings.pickupMapUrl': 'Google Maps සබැඳිය',

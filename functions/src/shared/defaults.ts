@@ -17,6 +17,7 @@ export const DEFAULT_PUBLIC_CONFIG: PublicConfig = {
     orderPhone: '',
     facebookPageUrl: '',
     tiktokUrl: 'https://www.tiktok.com/@lankanhistory',
+    youtubeUrl: '',
     email: '',
     pickupName: '',
     pickupAddress: '',

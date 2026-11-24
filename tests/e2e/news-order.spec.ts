@@ -67,3 +67,22 @@ test('in-person purchase is shown from the settings on the order page and the ne
   await page.goto('en/news/how-to-order/');
   await expect(page.locator('article [data-pickup]')).toContainText('Rs. 4,000 at Sample Bookshop');
 });
+
+test('home reader-list section links to Facebook, YouTube and TikTok', async ({ page }) => {
+  await resetAll();
+  await page.goto('');
+  const links = page.locator('section:has(#news-h) [data-testid="social-links"]');
+  await expect(links.locator('a[data-config="facebook"]')).toHaveAttribute(
+    'href',
+    'https://www.facebook.com/example',
+  );
+  await expect(links.locator('a[data-config="youtube"]')).toHaveAttribute(
+    'href',
+    'https://www.youtube.com/@example',
+  );
+  await expect(links.locator('a[data-config="tiktok"]')).toHaveAttribute(
+    'href',
+    'https://www.tiktok.com/@example',
+  );
+  await expect(links.locator('svg[data-icon="youtube"]')).toBeVisible();
+});

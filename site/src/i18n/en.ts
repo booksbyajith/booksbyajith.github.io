@@ -42,6 +42,7 @@ export const en: Dict = {
   'footer.facebook': 'Facebook page',
   'footer.social': 'Social media',
   'footer.tiktok': 'TikTok',
+  'footer.youtube': 'YouTube',
   'footer.rights': 'All rights reserved.',
   'footer.newsletter': 'Get news of new books and events',
 
@@ -533,6 +534,7 @@ export const en: Dict = {
   'admin.settings.orderPhone': 'Order phone number',
   'admin.settings.facebookUrl': 'Facebook page URL',
   'admin.settings.tiktokUrl': 'TikTok profile URL',
+  'admin.settings.youtubeUrl': 'YouTube channel URL',
   'admin.settings.contactEmail': 'Contact email (shown on the website)',
   'admin.settings.pickupPrice': 'Price (Rs.)',
   'admin.settings.pickupMapUrl': 'Google Maps link',

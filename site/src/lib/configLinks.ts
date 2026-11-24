@@ -40,6 +40,7 @@ export function initConfigLinks(): void {
       let url = '';
       if (kind === 'facebook') url = cfg.contact.facebookPageUrl;
       else if (kind === 'tiktok') url = cfg.contact.tiktokUrl ?? '';
+      else if (kind === 'youtube') url = cfg.contact.youtubeUrl ?? '';
       else if (kind === 'email' && cfg.contact.email) {
         url = `mailto:${cfg.contact.email}`;
         const label = el.querySelector('[data-email-label]');
