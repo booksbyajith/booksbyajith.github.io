@@ -36,8 +36,9 @@ const alts = resolveAlternates(lang, neutral, alternates);
 const urls = LANGS.filter((l) => alts[l] !== null).map((l) => ({ l, url: absUrl(href(l, alts[l]!)) }));
 const xDefault = urls.find((u) => u.l === 'si')?.url;
 const OG_LOCALE: Record<Lang, string> = { si: 'si_LK', en: 'en_GB', ta: 'ta_LK' };
-const siteName = t(lang, 'site.name');
-const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+// Browser tabs and link previews carry the shop's name.
+const siteName = t(lang, 'site.brand');
+const fullTitle = title === siteName || title === t(lang, 'site.name') ? siteName : `${title} | ${siteName}`;
 // ?v= changes when the share images are redrawn, so WhatsApp and Facebook fetch the new ones.
 const OG_VERSION = '3';
 const image = `${absUrl(ogImage ?? asset(`/og/default-${lang}.jpg`))}?v=${OG_VERSION}`;

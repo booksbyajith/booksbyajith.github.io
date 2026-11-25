@@ -3,6 +3,7 @@ import type { Dict } from './si';
 
 export const ta: Dict = {
   'site.name': 'வைத்தியர் அஜித் அமரசிங்க',
+  'site.brand': 'Books by Ajith',
   'site.tagline': 'இலங்கை வரலாறு பற்றிய ஆய்வுகள்',
   'site.skipToContent': 'உள்ளடக்கத்திற்குச் செல்லவும்',
   'site.langToggle': 'தமிழ்',

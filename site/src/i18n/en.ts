@@ -2,6 +2,7 @@ import type { Dict } from './si';
 
 export const en: Dict = {
   'site.name': 'Dr. Ajith Amarasinghe',
+  'site.brand': 'Books by Ajith',
   'site.tagline': 'Research on the history of Sri Lanka',
   'site.skipToContent': 'Skip to content',
   'site.langToggle': 'සිංහලෙන්',

@@ -1,6 +1,7 @@
 /* Sinhala UI text. AUTHOR: please review wording (see MANUAL_SETUP.md). */
 export const si = {
   'site.name': 'වෛද්‍ය අජිත් අමරසිංහ',
+  'site.brand': 'Books by Ajith',
   'site.tagline': 'ඉතිහාස පබැඳුම',
   'site.skipToContent': 'අන්තර්ගතයට යන්න',
   'site.langToggle': 'English',
