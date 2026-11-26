@@ -18,29 +18,12 @@ function colomboStart(kind: 'day' | 'month'): Date {
   return new Date(`${y}-${m}-${kind === 'day' ? d : '01'}T00:00:00+05:30`);
 }
 
-// Gregorian month names as used in Sri Lanka (the browser's si locale gives the old Sinhala months).
-const SI_MONTHS = [
-  'ජනවාරි',
-  'පෙබරවාරි',
-  'මාර්තු',
-  'අප්‍රේල්',
-  'මැයි',
-  'ජූනි',
-  'ජූලි',
-  'අගෝස්තු',
-  'සැප්තැම්බර්',
-  'ඔක්තෝබර්',
-  'නොවැම්බර්',
-  'දෙසැම්බර්',
-];
-
 export function Dashboard() {
   const t = useT();
   const { lang } = useAdmin();
   const [counts, setCounts] = useState<Partial<Record<OrderStatus, number>>>({});
   const [today, setToday] = useState<number | null>(null);
   const [revenue, setRevenue] = useState<number | null>(null);
-  const [revenueAll, setRevenueAll] = useState<number | null>(null);
   const [low, setLow] = useState<BookDoc[]>([]);
   const [extra, setExtra] = useState({ reviews: 0, enquiries: 0, failures: 0 });
 
@@ -74,18 +57,7 @@ export function Dashboard() {
           return snap.docs.reduce((n, d) => n + (d.get('totals.grandTotalLKR') ?? 0), 0);
         }
       };
-      // "This month" is the calendar month in Sri Lanka time: it starts again from
-      // zero on the 1st. The all-time total never resets.
-      setRevenue(
-        await sumTotals(
-          fs.query(
-            orders,
-            fs.where('status', 'in', paidStatuses),
-            fs.where('createdAt', '>=', fs.Timestamp.fromDate(colomboStart('month'))),
-          ),
-        ),
-      );
-      setRevenueAll(await sumTotals(fs.query(orders, fs.where('status', 'in', paidStatuses))));
+      setRevenue(await sumTotals(fs.query(orders, fs.where('status', 'in', paidStatuses))));
       const priv = (await fs.getDoc(fs.doc(db, 'config/private'))).data();
       const threshold = (priv?.lowStockThreshold as number | undefined) ?? 5;
       const books = (await fs.getDocs(fs.collection(db, 'books'))).docs.map((d) => d.data() as BookDoc);
@@ -111,17 +83,6 @@ export function Dashboard() {
         0,
       )
     : null;
-  const monthIdx = Number(
-    new Intl.DateTimeFormat('en-US', { month: 'numeric', timeZone: 'Asia/Colombo' }).format(new Date()),
-  );
-  const monthName =
-    lang === 'si'
-      ? SI_MONTHS[monthIdx - 1]
-      : new Intl.DateTimeFormat(lang === 'ta' ? 'ta-LK' : 'en-GB', {
-          month: 'long',
-          timeZone: 'Asia/Colombo',
-        }).format(new Date());
-
   const tile = (label: string, value: string | number | null, href?: string, warn = false) => (
     <a href={href ?? '#/'} class={`card block p-4 text-ink no-underline ${warn ? 'border-danger' : ''}`}>
       <p class="text-sm text-ink-soft">{label}</p>
@@ -134,8 +95,7 @@ export function Dashboard() {
       <div class="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
         {tile(t('admin.dash.today'), today, '#/orders')}
         {tile(t('admin.dash.totalOrders'), total, '#/orders')}
-        {tile(`${t('admin.dash.revenueMonth')} (${monthName})`, revenue === null ? null : formatLKR(revenue))}
-        {tile(t('admin.dash.revenueAll'), revenueAll === null ? null : formatLKR(revenueAll))}
+        {tile(t('admin.dash.revenue'), revenue === null ? null : formatLKR(revenue))}
         {tile(t('admin.dash.pendingReviews'), extra.reviews, '#/reviews')}
         {tile(t('admin.dash.enquiries'), extra.enquiries, '#/enquiries')}
         {tile(t('admin.dash.failures'), extra.failures, undefined, extra.failures > 0)}
