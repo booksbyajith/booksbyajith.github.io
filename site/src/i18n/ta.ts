@@ -444,6 +444,8 @@ export const ta: Dict = {
   'admin.nav.maintenance': 'தரவுத் தக்கவைப்பு',
   'admin.dash.today': 'இன்றைய ஆர்டர்கள்',
   'admin.dash.revenueMonth': 'இந்த மாத வருமானம்',
+  'admin.dash.totalOrders': 'மொத்த ஆர்டர்கள்',
+  'admin.dash.revenueAll': 'மொத்த வருமானம் (எல்லா காலமும்)',
   'admin.dash.byStatus': 'நிலை வாரியான ஆர்டர்கள்',
   'admin.dash.lowStock': 'குறைந்த இருப்பு',
   'admin.dash.pendingReviews': 'காத்திருக்கும் விமர்சனங்கள்',

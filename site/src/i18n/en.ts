@@ -450,6 +450,8 @@ export const en: Dict = {
   'admin.nav.maintenance': 'Data retention',
   'admin.dash.today': 'Orders today',
   'admin.dash.revenueMonth': 'Revenue this month',
+  'admin.dash.totalOrders': 'Total orders',
+  'admin.dash.revenueAll': 'Total revenue (all time)',
   'admin.dash.byStatus': 'Orders by status',
   'admin.dash.lowStock': 'Low stock',
   'admin.dash.pendingReviews': 'Reviews waiting',

@@ -18,12 +18,29 @@ function colomboStart(kind: 'day' | 'month'): Date {
   return new Date(`${y}-${m}-${kind === 'day' ? d : '01'}T00:00:00+05:30`);
 }
 
+// Gregorian month names as used in Sri Lanka (the browser's si locale gives the old Sinhala months).
+const SI_MONTHS = [
+  'ජනවාරි',
+  'පෙබරවාරි',
+  'මාර්තු',
+  'අප්‍රේල්',
+  'මැයි',
+  'ජූනි',
+  'ජූලි',
+  'අගෝස්තු',
+  'සැප්තැම්බර්',
+  'ඔක්තෝබර්',
+  'නොවැම්බර්',
+  'දෙසැම්බර්',
+];
+
 export function Dashboard() {
   const t = useT();
   const { lang } = useAdmin();
   const [counts, setCounts] = useState<Partial<Record<OrderStatus, number>>>({});
   const [today, setToday] = useState<number | null>(null);
   const [revenue, setRevenue] = useState<number | null>(null);
+  const [revenueAll, setRevenueAll] = useState<number | null>(null);
   const [low, setLow] = useState<BookDoc[]>([]);
   const [extra, setExtra] = useState({ reviews: 0, enquiries: 0, failures: 0 });
 
@@ -46,20 +63,29 @@ export function Dashboard() {
           )
         ).data().count,
       );
-      const paid = fs.query(
-        orders,
-        fs.where('status', 'in', ['payment_verified', 'packed', 'dispatched', 'delivered']),
-        fs.where('createdAt', '>=', fs.Timestamp.fromDate(colomboStart('month'))),
+      const paidStatuses = ['payment_verified', 'packed', 'dispatched', 'delivered'];
+      const sumTotals = async (q: ReturnType<typeof fs.query>) => {
+        try {
+          return (
+            (await fs.getAggregateFromServer(q, { total: fs.sum('totals.grandTotalLKR') })).data().total ?? 0
+          );
+        } catch {
+          const snap = await fs.getDocs(q); // R6 fallback
+          return snap.docs.reduce((n, d) => n + (d.get('totals.grandTotalLKR') ?? 0), 0);
+        }
+      };
+      // "This month" is the calendar month in Sri Lanka time: it starts again from
+      // zero on the 1st. The all-time total never resets.
+      setRevenue(
+        await sumTotals(
+          fs.query(
+            orders,
+            fs.where('status', 'in', paidStatuses),
+            fs.where('createdAt', '>=', fs.Timestamp.fromDate(colomboStart('month'))),
+          ),
+        ),
       );
-      try {
-        setRevenue(
-          (await fs.getAggregateFromServer(paid, { total: fs.sum('totals.grandTotalLKR') })).data().total ??
-            0,
-        );
-      } catch {
-        const snap = await fs.getDocs(paid); // R6 fallback
-        setRevenue(snap.docs.reduce((n, d) => n + (d.get('totals.grandTotalLKR') ?? 0), 0));
-      }
+      setRevenueAll(await sumTotals(fs.query(orders, fs.where('status', 'in', paidStatuses))));
       const priv = (await fs.getDoc(fs.doc(db, 'config/private'))).data();
       const threshold = (priv?.lowStockThreshold as number | undefined) ?? 5;
       const books = (await fs.getDocs(fs.collection(db, 'books'))).docs.map((d) => d.data() as BookDoc);
@@ -78,6 +104,24 @@ export function Dashboard() {
     })();
   }, []);
 
+  // Every real order: all statuses except rejected and cancelled.
+  const total = ORDER_STATUSES.every((s) => counts[s] !== undefined)
+    ? ORDER_STATUSES.filter((s) => s !== 'rejected' && s !== 'cancelled').reduce(
+        (n, s) => n + (counts[s] ?? 0),
+        0,
+      )
+    : null;
+  const monthIdx = Number(
+    new Intl.DateTimeFormat('en-US', { month: 'numeric', timeZone: 'Asia/Colombo' }).format(new Date()),
+  );
+  const monthName =
+    lang === 'si'
+      ? SI_MONTHS[monthIdx - 1]
+      : new Intl.DateTimeFormat(lang === 'ta' ? 'ta-LK' : 'en-GB', {
+          month: 'long',
+          timeZone: 'Asia/Colombo',
+        }).format(new Date());
+
   const tile = (label: string, value: string | number | null, href?: string, warn = false) => (
     <a href={href ?? '#/'} class={`card block p-4 text-ink no-underline ${warn ? 'border-danger' : ''}`}>
       <p class="text-sm text-ink-soft">{label}</p>
@@ -89,7 +133,9 @@ export function Dashboard() {
     <div data-screen="dashboard">
       <div class="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
         {tile(t('admin.dash.today'), today, '#/orders')}
-        {tile(t('admin.dash.revenueMonth'), revenue === null ? null : formatLKR(revenue))}
+        {tile(t('admin.dash.totalOrders'), total, '#/orders')}
+        {tile(`${t('admin.dash.revenueMonth')} (${monthName})`, revenue === null ? null : formatLKR(revenue))}
+        {tile(t('admin.dash.revenueAll'), revenueAll === null ? null : formatLKR(revenueAll))}
         {tile(t('admin.dash.pendingReviews'), extra.reviews, '#/reviews')}
         {tile(t('admin.dash.enquiries'), extra.enquiries, '#/enquiries')}
         {tile(t('admin.dash.failures'), extra.failures, undefined, extra.failures > 0)}
